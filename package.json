@@ -1,7 +1,7 @@
 {
-  "name": "googleoauth",
+  "name": "mernstarter",
   "version": "1.0.0",
-  "description": "Google Oauth setup",
+  "description": "MERN Starter kit",
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
@@ -16,6 +16,7 @@
   },
   "author": "John Young",
   "license": "ISC",
+  "repository": "github:johnfyoung/mernstarter",
   "dependencies": {
     "express": "^4.17.1",
     "webpack": "^4.36.1",
