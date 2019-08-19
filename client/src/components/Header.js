@@ -1,10 +1,9 @@
-import React from 'react'
-import Nav from './Nav'
+import React from 'react';
 
 export default function Header(props) {
     return (
         <header>
-            <Nav nav={props.nav} />
+            {props.nav}
         </header>
     )
 }
