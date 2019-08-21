@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { dbg } from "../../../utils";
 
-export default function Nav({ nav, isAuthd, hasSearch, handleSignOut }) {
-  const { brand, menu, active } = nav;
-  console.log("isAuthd", isAuthd);
+export default function Nav({ nav, isAuthd, handleSignOut }) {
+  const { brand, menu, hasSearch } = nav;
+  dbg("isAuthd", isAuthd);
+  dbg("Menu", menu);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       {brand && (
@@ -31,11 +33,11 @@ export default function Nav({ nav, isAuthd, hasSearch, handleSignOut }) {
                 return (
                   <li
                     key={key}
-                    className={`nav-item ${active === key ? "active" : ""}`}
+                    className={`nav-item ${menu[key].active ? "active" : ""}`}
                   >
                     <Link className="nav-link" to={menu[key].path}>
                       {menu[key].label}
-                      {active === key ? (
+                      {menu[key].active ? (
                         <span className="sr-only">(current)</span>
                       ) : (
                         ""

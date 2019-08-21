@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import PageTemplate from "../templates/PageTemplate";
-import "../../resources/scss/SignIn.scss";
+import Page from "../../presentation/Page";
 
 class SignIn extends Component {
   state = {
@@ -18,7 +17,7 @@ class SignIn extends Component {
     const { nav, handleSignIn } = this.props;
 
     return (
-      <PageTemplate pageClass="page-signin" nav={nav}>
+      <Page pageClass="page-signin" nav={nav}>
         <div className="container">
           <div className="d-flex row justify-content-center">
             <div className="col-8 page-signin-form">
@@ -56,7 +55,7 @@ class SignIn extends Component {
             </div>
           </div>
         </div>
-      </PageTemplate>
+      </Page>
     );
   }
 }

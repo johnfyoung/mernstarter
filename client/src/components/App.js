@@ -1,86 +1,62 @@
 import React, { Component } from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { Switch, Router, Route } from "react-router-dom";
 
 import API from "../services";
-import "../resources/scss/App.scss";
-import Nav from "./parts/Nav";
-import Messages from "./parts/Messages";
-import Home from "./pages/Home";
-import Admin from "./pages/Admin";
-import SignIn from "./pages/SignIn";
-import NotFound from "./pages/NotFound";
+import { dbg, history } from "../utils";
+import config from "../config";
+
+import { alertActions } from "../redux/actions/alert.actions";
+import { navActions } from "../redux/actions/nav.actions";
+
+import ConnectedNav from "./connected/parts/ConnectedNav";
+import Announcement from "./presentation/parts/Announcement";
+
+// Pages
+import HomePage from "./connected/pages/HomePage";
+import AdminPage from "./connected/pages/AdminPage";
+import SignInPage from "./connected/pages/SignInPage";
+import NotFoundPage from "./connected/pages/NotFound";
 
 class App extends Component {
-  state = {
-    appName: "MERN Starter",
-    authenticated: false,
-    nav: {
-      brand: {
-        path: "/",
-        label: "MERN Starter"
-      },
-      active: "home",
-      hasSearch: false,
-      messages: { success: [], warning: [], info: [], error: [] },
-      msg: null,
-      menu: {
-        home: {
-          path: "/",
-          label: "Home",
-          privilege: false
-        },
-        admin: {
-          path: "/admin",
-          label: "Admin",
-          privilege: true
-        }
-      }
-    }
-  };
-
   componentDidMount = () => {
-    console.log("App props", this.props);
-    this.props.history.listen(this.handleLocationChange);
+    dbg("App props", this.props);
+    dbg("history post App mount", history);
+    dbg("props post App mount", this.props);
+    this.props.announce("Hello World");
 
-    this.setState(
-      {
-        authenti: API.auth.isAuthorized()
-      },
-      () => {
-        this.handleLocationChange(this.props.location, "PUSH");
-        console.log("State post App mount", this.state);
-      }
-    );
+    history.listen(this.handleLocationChange);
+
+    this.handleLocationChange(history.location, "PUSH");
   };
-
-  getMessages = () => {
-    //const msgs = <Messages messages={this.state.messages} />;
-  };
-
-  setMessage = (msg, type) => {};
 
   handleLocationChange = (location, action) => {
-    console.log("Changin location...", location);
-    const { menu } = this.state.nav;
+    dbg("Changing location app", location);
+    const { nav, locationChange } = this.props;
+
+    const activeNavKey = this.getActiveNavKey(nav.menu, location);
+    locationChange(activeNavKey);
+
+    const pageLabel = nav.menu[activeNavKey]
+      ? ` - ${nav.menu[activeNavKey].label}`
+      : "";
+    document.title = `${config.siteName}${pageLabel}`;
+
+    // if (this.props.isAuthd === true && location.pathname === "/signin") {
+    //   history.push("/");
+    //   return;
+    // }
+    // if (this.props.activePageLabel) {
+    //   document.title = `${config.siteName} - ${this.props.activePageLabel}`;
+    // }
+  };
+
+  getActiveNavKey = (menu, location) => {
     const active = Object.keys(menu).filter(
       key => menu[key].path === location.pathname
     );
 
-    if (this.state.authenticated === true && location.pathname === "/signin") {
-      this.props.history.push("/");
-      return;
-    }
-
-    if (active.length > 0) {
-      document.title = `${this.state.appName} - ${menu[active[0]].label}`;
-      this.setState(prev => ({
-        ...prev,
-        nav: {
-          ...prev.nav,
-          active: active[0]
-        }
-      }));
-    }
+    return active.length > 0 ? active[0] : null;
   };
 
   handleSignIn = (e, { email, password }) => {
@@ -97,7 +73,7 @@ class App extends Component {
       );
     }
 
-    console.log("handling sign in", email, password);
+    dbg("handling sign in", email, password);
   };
 
   handleSignOut = () => {
@@ -109,42 +85,56 @@ class App extends Component {
   };
 
   render() {
-    const topNav = (
-      <Nav
-        nav={this.state.nav}
-        isAuthd={this.state.authenticated}
-        hasSearch={this.state.hasSearch}
-        handleSignOut={this.handleSignOut}
-      />
-    );
+    const topNav = <ConnectedNav />;
+    const { announcement } = this.props;
+
+    dbg("announcement", announcement);
     return (
       <div className="App">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            component={() => <Home nav={topNav} messages={this.state.msg} />}
+        {announcement && announcement.message && (
+          <Announcement
+            type={announcement.type}
+            message={announcement.message}
           />
-          <Route
-            path="/admin"
-            component={() => <Admin nav={topNav} messages={this.state.msg} />}
-          />
-          <Route
-            path="/signin"
-            component={() => (
-              <SignIn
-                nav={topNav}
-                handleSignIn={this.handleSignIn}
-                setMsgs={this.setMessage}
-                messages={this.state.msg}
-              />
-            )}
-          />
-          <Route component={() => <NotFound nav={topNav} />} />
-        </Switch>
+        )}
+        <Router history={history}>
+          <Switch>
+            <Route exact path="/" component={() => <HomePage nav={topNav} />} />
+            <Route path="/admin" component={() => <AdminPage nav={topNav} />} />
+            <Route
+              path="/signin"
+              component={() => (
+                <SignInPage
+                  nav={topNav}
+                  handleSignIn={this.handleSignIn}
+                  setMsgs={this.setMessage}
+                />
+              )}
+            />
+            <Route component={() => <NotFoundPage nav={topNav} />} />
+          </Switch>
+        </Router>
       </div>
     );
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = ({ alert, auth, nav }) => {
+  return {
+    isAuthd: auth.authenticated,
+    announcement: alert.announcement,
+    nav
+  };
+};
+
+const actionCreators = {
+  announce: alertActions.announce,
+  locationChange: navActions.locationChanged
+};
+
+const ConnectedApp = connect(
+  mapStateToProps,
+  actionCreators
+)(App);
+
+export default ConnectedApp;
