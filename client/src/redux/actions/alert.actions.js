@@ -20,8 +20,8 @@ const announce = message => {
   return { type: alertConstants.ANNOUNCE, message };
 };
 
-const clear = () => {
-  return { type: alertConstants.CLEAR };
+const clearAlert = () => {
+  return { type: alertConstants.CLEARALERT };
 };
 
 export const alertActions = {
@@ -30,5 +30,5 @@ export const alertActions = {
   warn,
   info,
   announce,
-  clear
+  clearAlert
 };

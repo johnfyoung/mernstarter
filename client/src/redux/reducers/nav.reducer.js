@@ -30,6 +30,11 @@ export function nav(state = initialState, action) {
   switch (action.type) {
     case navConstants.LOCATION_CHANGED:
       const menu = state.menu;
+
+      Object.keys(menu).forEach(key => {
+        delete menu[key].active;
+      });
+
       if (menu[action.navKey]) {
         return {
           ...state,
@@ -41,10 +46,6 @@ export function nav(state = initialState, action) {
             }
           }
         };
-      } else {
-        Object.keys(menu).forEach(key => {
-          delete menu[key].active;
-        });
       }
 
       return state;

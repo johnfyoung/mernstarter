@@ -6,9 +6,25 @@ import { store } from "./utils/store";
 
 import "./resources/scss/main.scss";
 import App from "./components/App";
+import { authActions } from "./redux/actions";
+
 import * as serviceWorker from "./serviceWorker";
 
-console.log("process.env", process.env);
+if (localStorage.user) {
+  // set user and isAuthenticated
+  store.dispatch(authActions.setCurrentUser(localStorage.user));
+
+  // check for expired token
+  const currentTime = Date.now() / 1000;
+
+  if (localStorage.user.exp < currentTime) {
+    store.dispatch(authActions.logout());
+    // TODO: clear profile
+
+    // redirect to login
+    window.location.href = "/login";
+  }
+}
 
 ReactDOM.render(
   <Provider store={store}>

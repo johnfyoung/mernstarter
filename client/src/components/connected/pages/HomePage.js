@@ -1,10 +1,10 @@
 import React from "react";
-import Page from "../../presentation/Page";
+import ConnectedPage from "../../connected/templates/ConnectedPage";
 
 export default function HomePage(props) {
   return (
-    <Page pageClass="page-home" nav={props.nav}>
+    <ConnectedPage pageClass="page-home" nav={props.nav}>
       Hello home.
-    </Page>
+    </ConnectedPage>
   );
 }

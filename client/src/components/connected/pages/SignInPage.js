@@ -1,7 +1,12 @@
 import React, { Component } from "react";
-import Page from "../../presentation/Page";
+import { connect } from "react-redux";
 
-class SignIn extends Component {
+import { dbg } from "../../../utils";
+
+import { authActions } from "../../../redux/actions";
+import ConnectedPage from "../../connected/templates/ConnectedPage";
+
+class SignInPage extends Component {
   state = {
     email: "",
     password: ""
@@ -13,16 +18,23 @@ class SignIn extends Component {
     });
   };
 
+  handleSubmit = e => {
+    dbg("SignInPage::handleSubmit event", e);
+    e.preventDefault();
+
+    this.props.login(this.state.email, this.state.password);
+  };
+
   render() {
-    const { nav, handleSignIn } = this.props;
+    const { nav } = this.props;
 
     return (
-      <Page pageClass="page-signin" nav={nav}>
+      <ConnectedPage pageClass="page-signin" nav={nav}>
         <div className="container">
           <div className="d-flex row justify-content-center">
-            <div className="col-8 page-signin-form">
+            <div className="col-md-8 page-signin-form">
               <h1>Sign in for access:</h1>
-              <form onSubmit={e => handleSignIn(e, this.state)}>
+              <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="email">Email address</label>
                   <input
@@ -55,9 +67,16 @@ class SignIn extends Component {
             </div>
           </div>
         </div>
-      </Page>
+      </ConnectedPage>
     );
   }
 }
 
-export default SignIn;
+const actionCreators = {
+  login: authActions.login
+};
+
+export default connect(
+  null,
+  actionCreators
+)(SignInPage);

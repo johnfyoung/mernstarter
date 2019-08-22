@@ -2,34 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Nav from "../../presentation/parts/Nav";
 
+import { authActions } from "../../../redux/actions/auth.actions";
+
 import { dbg } from "../../../utils";
 
 class ConnectedNav extends Component {
-  componentDidMount = () => {
-    // history.listen((location, action) => {
-    //   this.handleLocationChange(location, action);
-    // });
-    // this.handleLocationChange(history.location, "PUSH");
-  };
-
   render() {
-    const { isAuthd, nav } = this.props;
+    const { isAuthd, nav, logout } = this.props;
 
-    dbg("nav", nav);
+    dbg("ConnectedNav::render nav", nav);
 
-    // const active = Object.keys(nav.menu).filter(
-    //   key => nav.menu[key].path === history.location.pathname
-    // );
-
-    return (
-      <Nav
-        nav={nav}
-        isAuthd={isAuthd}
-        handleSignOut={() => {
-          dbg("Signing out");
-        }}
-      />
-    );
+    return <Nav nav={nav} isAuthd={isAuthd} handleSignOut={logout} />;
   }
 }
 
@@ -40,4 +23,11 @@ const mapStateToProps = ({ auth, nav }) => {
   };
 };
 
-export default connect(mapStateToProps)(ConnectedNav);
+const actionCreators = {
+  logout: authActions.logout
+};
+
+export default connect(
+  mapStateToProps,
+  actionCreators
+)(ConnectedNav);

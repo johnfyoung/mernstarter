@@ -19,11 +19,7 @@
     "repository": "github:johnfyoung/mernstarter",
     "dependencies": {
         "express": "^4.17.1",
-        "global": "^4.4.0",
         "nodemon": "^1.19.1",
-        "react-redux": "^7.1.0",
-        "redux": "^4.0.4",
-        "redux-thunk": "^2.3.0",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.3.6"
     },

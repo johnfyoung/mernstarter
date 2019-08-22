@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "./parts/Header";
-import Footer from "./parts/Footer";
+import Header from "../parts/Header";
+import Footer from "../parts/Footer";
 
 export default function Page({ pageClass, children, nav }) {
   return (

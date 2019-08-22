@@ -4,8 +4,8 @@ import { dbg } from "../../../utils";
 
 export default function Nav({ nav, isAuthd, handleSignOut }) {
   const { brand, menu, hasSearch } = nav;
-  dbg("isAuthd", isAuthd);
-  dbg("Menu", menu);
+  dbg("Nav:: isAuthd", isAuthd);
+  dbg("Nav:: Menu", menu);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       {brand && (

@@ -1,6 +1,6 @@
 import { alertConstants } from "../constants";
 
-export function alert(state = { alert: {}, announcement: {} }, action) {
+export function alert(state = { alert: null, announcement: null }, action) {
   switch (action.type) {
     case alertConstants.SUCCESS:
       return {
@@ -42,8 +42,11 @@ export function alert(state = { alert: {}, announcement: {} }, action) {
           message: action.message
         }
       };
-    case alertConstants.CLEAR:
-      return {};
+    case alertConstants.CLEARALERT:
+      return {
+        ...state,
+        alert: null
+      };
     default:
       return state;
   }

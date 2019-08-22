@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Switch, Router, Route } from "react-router-dom";
 
-import API from "../services";
 import { dbg, history } from "../utils";
 import config from "../config";
 
@@ -11,6 +10,7 @@ import { navActions } from "../redux/actions/nav.actions";
 
 import ConnectedNav from "./connected/parts/ConnectedNav";
 import Announcement from "./presentation/parts/Announcement";
+import PrivateRoute from "./presentation/parts/PrivateRoute";
 
 // Pages
 import HomePage from "./connected/pages/HomePage";
@@ -20,10 +20,9 @@ import NotFoundPage from "./connected/pages/NotFound";
 
 class App extends Component {
   componentDidMount = () => {
-    dbg("App props", this.props);
-    dbg("history post App mount", history);
-    dbg("props post App mount", this.props);
-    this.props.announce("Hello World");
+    dbg("App::componentDidMount props", this.props);
+    dbg("App::componentDidMount history post App mount", history);
+    this.props.announce("Here is a site wide announcement");
 
     history.listen(this.handleLocationChange);
 
@@ -31,8 +30,10 @@ class App extends Component {
   };
 
   handleLocationChange = (location, action) => {
-    dbg("Changing location app", location);
-    const { nav, locationChange } = this.props;
+    dbg("App::handleLocationChange Changing location app", location);
+    const { nav, locationChange, clearAlert } = this.props;
+
+    clearAlert();
 
     const activeNavKey = this.getActiveNavKey(nav.menu, location);
     locationChange(activeNavKey);
@@ -41,14 +42,6 @@ class App extends Component {
       ? ` - ${nav.menu[activeNavKey].label}`
       : "";
     document.title = `${config.siteName}${pageLabel}`;
-
-    // if (this.props.isAuthd === true && location.pathname === "/signin") {
-    //   history.push("/");
-    //   return;
-    // }
-    // if (this.props.activePageLabel) {
-    //   document.title = `${config.siteName} - ${this.props.activePageLabel}`;
-    // }
   };
 
   getActiveNavKey = (menu, location) => {
@@ -59,36 +52,10 @@ class App extends Component {
     return active.length > 0 ? active[0] : null;
   };
 
-  handleSignIn = (e, { email, password }) => {
-    e.preventDefault();
-
-    if (API.auth.authenticate(email, password)) {
-      this.setState(
-        {
-          authorized: true
-        },
-        () => {
-          this.handleLocationChange(this.props.location, "PUSH");
-        }
-      );
-    }
-
-    dbg("handling sign in", email, password);
-  };
-
-  handleSignOut = () => {
-    API.auth.revoke();
-
-    this.setState({
-      authorized: false
-    });
-  };
-
   render() {
     const topNav = <ConnectedNav />;
     const { announcement } = this.props;
 
-    dbg("announcement", announcement);
     return (
       <div className="App">
         {announcement && announcement.message && (
@@ -100,15 +67,14 @@ class App extends Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={() => <HomePage nav={topNav} />} />
-            <Route path="/admin" component={() => <AdminPage nav={topNav} />} />
+            <PrivateRoute
+              path="/admin"
+              component={() => <AdminPage nav={topNav} />}
+            />
             <Route
               path="/signin"
               component={() => (
-                <SignInPage
-                  nav={topNav}
-                  handleSignIn={this.handleSignIn}
-                  setMsgs={this.setMessage}
-                />
+                <SignInPage nav={topNav} setMsgs={this.setMessage} />
               )}
             />
             <Route component={() => <NotFoundPage nav={topNav} />} />
@@ -129,6 +95,7 @@ const mapStateToProps = ({ alert, auth, nav }) => {
 
 const actionCreators = {
   announce: alertActions.announce,
+  clearAlert: alertActions.clearAlert,
   locationChange: navActions.locationChanged
 };
 

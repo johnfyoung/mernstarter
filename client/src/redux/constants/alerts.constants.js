@@ -4,5 +4,5 @@ export const alertConstants = {
   WARN: "ALERT_WARN",
   INFO: "ALERT_INFO",
   ANNOUNCE: "ALERT_ANNOUNCE",
-  CLEAR: "ALERT_CLEAR"
+  CLEARALERT: "ALERT_CLEARALERT"
 };
