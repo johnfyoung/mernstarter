@@ -13,11 +13,6 @@ const initialState = {
       label: "Home",
       privilege: false
     },
-    // signin: {
-    //   path: "/signin",
-    //   label: "Sign In",
-    //   privilege: false
-    // },
     admin: {
       path: "/admin",
       label: "Admin",
