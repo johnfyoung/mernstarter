@@ -1,4 +1,4 @@
-import { authConstants, usersConstants } from "../constants";
+import { authConstants, usersConstants, serviceConstants } from "../constants";
 import { authServices } from "../../services";
 import { alertActions } from "../actions";
 import { history } from "../../utils";
@@ -12,28 +12,38 @@ const login = (username, password) => {
   return dispatch => {
     dispatch(request({ username }));
 
-    authServices.login(username, password).then(
-      user => {
+    authServices
+      .login(username, password)
+      .then(user => {
         localStorage.setItem("user", JSON.stringify(user));
         dispatch(success(user));
         dispatch(setCurrentUser(user));
-        history.push("/");
-      },
-      error => {
-        dispatch(failure(error.toString()));
-        dispatch(alertActions.error(error.toString()));
-      }
-    );
+        history.push("/admin");
+      })
+      .catch(error => {
+        dispatch(failure(error.data));
+        dispatch(alertActions.error("There was an error signing in."));
+      });
   };
 
   function request(user) {
-    return { type: authConstants.LOGIN_REQUEST, user };
+    return dispatch => {
+      dispatch({ type: authConstants.LOGIN_REQUEST, user });
+      dispatch({ type: serviceConstants.POSTBACK_BEGIN });
+    };
   }
   function success(user) {
-    return { type: authConstants.LOGIN_SUCCESS, user };
+    return dispatch => {
+      dispatch({ type: serviceConstants.POSTBACK_END });
+      dispatch({ type: authConstants.LOGIN_SUCCESS, user });
+    };
   }
   function failure(error) {
-    return { type: authConstants.LOGIN_FAILURE, error };
+    return dispatch => {
+      dispatch({ type: serviceConstants.POSTBACK_END });
+      dispatch({ type: serviceConstants.POSTBACK_ERROR, error });
+      dispatch({ type: authConstants.LOGIN_FAILURE, error });
+    };
   }
 };
 
@@ -64,6 +74,8 @@ const logout = () => {
     localStorage.removeItem("user");
 
     dispatch(setCurrentUser({}));
+    history.push("/");
+    dispatch(alertActions.info("You have signed out"));
   };
 };
 

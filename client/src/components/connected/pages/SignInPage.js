@@ -26,45 +26,52 @@ class SignInPage extends Component {
   };
 
   render() {
-    const { nav } = this.props;
+    const { nav, service } = this.props;
+    const errors = service.error ? service.error : {};
 
     return (
       <ConnectedPage pageClass="page-signin" nav={nav}>
-        <div className="container">
-          <div className="d-flex row justify-content-center">
-            <div className="col-md-8 page-signin-form">
-              <h1>Sign in for access:</h1>
-              <form onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="email">Email address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    name="email"
-                    aria-describedby="emailHelp"
-                    placeholder="Enter email"
-                    value={this.state.email}
-                    onChange={this.handleOnChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.handleOnChange}
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              </form>
-            </div>
+        <div className="d-flex row justify-content-center">
+          <div className="col-md-8 page-signin-form">
+            <h1>Sign in for access:</h1>
+            <form onSubmit={this.handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">Email address</label>
+                <input
+                  type="email"
+                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                  id="email"
+                  name="email"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                  value={this.state.email}
+                  onChange={this.handleOnChange}
+                />
+                {errors.email && (
+                  <div className="invalid-feedback">{errors.email}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  className={`form-control ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.handleOnChange}
+                />
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </form>
           </div>
         </div>
       </ConnectedPage>
@@ -72,11 +79,15 @@ class SignInPage extends Component {
   }
 }
 
+const mapStateToProps = ({ service }) => ({
+  service
+});
+
 const actionCreators = {
   login: authActions.login
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   actionCreators
 )(SignInPage);

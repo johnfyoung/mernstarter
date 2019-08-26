@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Switch, Router, Route } from "react-router-dom";
+import { Router } from "react-router-dom";
 
 import { dbg, history } from "../utils";
 import config from "../config";
@@ -8,9 +8,11 @@ import config from "../config";
 import { alertActions } from "../redux/actions/alert.actions";
 import { navActions } from "../redux/actions/nav.actions";
 
+import Header from "../components/presentation/parts/Header";
+import Footer from "../components/presentation/parts/Footer";
 import ConnectedNav from "./connected/parts/ConnectedNav";
 import Announcement from "./presentation/parts/Announcement";
-import PrivateRoute from "./presentation/parts/PrivateRoute";
+import TransitionRoute from "./presentation/parts/TransitionRoute";
 
 // Pages
 import HomePage from "./connected/pages/HomePage";
@@ -33,7 +35,17 @@ class App extends Component {
     dbg("App::handleLocationChange Changing location app", location);
     const { nav, locationChange, clearAlert } = this.props;
 
+    // TODO refactor the authorization to paths
+    // PrivateRoutes do no work with the CSSTransitions
+    if (this.props.isAuthd && location.pathname === "/signin") {
+      history.push("/");
+    }
+
     clearAlert();
+    if (!this.props.isAuthd && location.pathname === "/admin") {
+      history.push("/signin");
+      this.props.errorAlert("Please sign in for access");
+    }
 
     const activeNavKey = this.getActiveNavKey(nav.menu, location);
     locationChange(activeNavKey);
@@ -56,6 +68,10 @@ class App extends Component {
     const topNav = <ConnectedNav />;
     const { announcement } = this.props;
 
+    // TODO refactor the route paths list. This is needed for the
+    // catch all route. Router Switch doesn't work with the CSSTransitions
+    const routePaths = ["/", "/signin", "/signin/", "/admin", "/admin/"];
+
     return (
       <div className="App">
         {announcement && announcement.message && (
@@ -64,21 +80,14 @@ class App extends Component {
             message={announcement.message}
           />
         )}
+
         <Router history={history}>
-          <Switch>
-            <Route exact path="/" component={() => <HomePage nav={topNav} />} />
-            <PrivateRoute
-              path="/admin"
-              component={() => <AdminPage nav={topNav} />}
-            />
-            <Route
-              path="/signin"
-              component={() => (
-                <SignInPage nav={topNav} setMsgs={this.setMessage} />
-              )}
-            />
-            <Route component={() => <NotFoundPage nav={topNav} />} />
-          </Switch>
+          <Header nav={topNav} />
+          <TransitionRoute exact path="/" component={HomePage} />
+          <TransitionRoute exact path="/signin" component={SignInPage} />
+          <TransitionRoute exact path="/admin" component={AdminPage} />
+          <TransitionRoute routePaths={routePaths} component={NotFoundPage} />
+          <Footer />
         </Router>
       </div>
     );
@@ -96,7 +105,8 @@ const mapStateToProps = ({ alert, auth, nav }) => {
 const actionCreators = {
   announce: alertActions.announce,
   clearAlert: alertActions.clearAlert,
-  locationChange: navActions.locationChanged
+  locationChange: navActions.locationChanged,
+  errorAlert: alertActions.error
 };
 
 const ConnectedApp = connect(

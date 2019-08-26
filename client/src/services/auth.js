@@ -1,4 +1,5 @@
 import { dbg } from "../utils";
+import axios from "axios";
 
 /**
  * auth services
@@ -6,25 +7,21 @@ import { dbg } from "../utils";
  * This file is a stub
  */
 
-const login = (username, password) => {
-  // emulate a remote service
-  return new Promise((resolve, reject) => {
-    setTimeout(function() {
-      if (username === "john@john.com" && password === "password") {
-        const user = {
-          username: "john@john.com",
-          email: "john@john.com",
-          name: "John Young",
-          exp: Date.now() / 1000 + 60,
-          token: "fake token here"
-        };
-
-        resolve(user);
-      } else {
-        reject("This user and password combination does not exist");
+const login = (email, password) => {
+  return axios
+    .post("/api/auth/authenticate", { email, password })
+    .then(res => {
+      dbg("authServices::login response", res);
+      if (res.status === 200) {
+        return res.data.user;
       }
-    }, 1000);
-  });
+    })
+    .catch(error => {
+      dbg("authServices::login error", error);
+      const err = Error("Authentication error");
+      err.data = error.response.data;
+      throw err;
+    });
 };
 
 const isAuthorized = async (resource, token) => {
