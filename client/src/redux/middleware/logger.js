@@ -1,4 +1,4 @@
-import { dbg } from "../../utils/log";
+import { dbg } from "../../utils";
 
 /**
  * Logs an action to the console

@@ -2,10 +2,9 @@ import axios from "axios";
 import { authServices } from "../services";
 
 /**
- * TODO: hook this up when JWT is in place
  * @param {*} token
  */
-const setAuthToken = token => {
+export const setAuthToken = token => {
   if (token) {
     // Apply to every request
     axios.defaults.headers.common["Authorization"] = token;
@@ -18,7 +17,7 @@ const setAuthToken = token => {
  * TODO: in development
  * @param {*} resource
  */
-const checkPrivileges = async resource => {
+export const checkPrivileges = async resource => {
   console.log("checkPrivileges::");
   const user = localStorage.getItem("user");
   if (user) {
@@ -29,9 +28,4 @@ const checkPrivileges = async resource => {
 
   console.log("checkPrivileges:: no user");
   return false;
-};
-
-export const authUtils = {
-  setAuthToken,
-  checkPrivileges
 };
