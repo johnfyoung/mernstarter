@@ -13,7 +13,7 @@ const login = (email, password) => {
     .then(res => {
       dbg("authServices::login response", res);
       if (res.status === 200) {
-        return res.data.user;
+        return res.data;
       }
     })
     .catch(error => {

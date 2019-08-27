@@ -1,5 +1,7 @@
-import mongoose, { SchemaType } from "mongoose";
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
+
+import { Group } from "./group";
 
 const userSchema = new Schema({
   firstName: {
@@ -21,7 +23,7 @@ const userSchema = new Schema({
   groups: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Group"
+      ref: Group.modelName
     }
   ],
   permissions: {

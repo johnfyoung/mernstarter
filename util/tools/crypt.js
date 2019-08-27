@@ -12,3 +12,7 @@ export const encrypt = password => {
     throw err;
   }
 };
+
+export const compare = (plain, hash) => {
+  return bcrypt.compareSync(plain, hash);
+};

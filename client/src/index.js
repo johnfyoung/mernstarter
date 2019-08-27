@@ -1,28 +1,31 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import { Provider } from "react-redux";
-import { store } from "./utils/store";
+import jwt_decode from "jwt-decode";
+
+import { store, setAuthToken } from "./utils";
+import { authActions } from "./redux/actions";
 
 import "./resources/scss/main.scss";
 import App from "./components/App";
-import { authActions } from "./redux/actions";
 
 import * as serviceWorker from "./serviceWorker";
 
-if (localStorage.user) {
-  // set user and isAuthenticated
-  store.dispatch(authActions.setCurrentUser(localStorage.user));
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  setAuthToken(localStorage.jwtToken);
+
+  // decode the token
+  const decoded = jwt_decode(localStorage.jwtToken);
 
   // check for expired token
   const currentTime = Date.now() / 1000;
 
-  if (localStorage.user.exp < currentTime) {
+  if (decoded.exp < currentTime) {
     store.dispatch(authActions.logout());
-    // TODO: clear profile
-
-    // redirect to login
-    window.location.href = "/login";
+  } else {
+    // set user and isAuthenticated
+    store.dispatch(authActions.setCurrentUser(decoded));
   }
 }
 

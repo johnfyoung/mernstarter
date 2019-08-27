@@ -1,8 +1,9 @@
+import jwt_decode from "jwt-decode";
+
 import { authConstants, usersConstants, serviceConstants } from "../constants";
 import { authServices } from "../../services";
 import { alertActions } from "../actions";
-import { history } from "../../utils";
-import { dbg } from "../../utils";
+import { history, dbg, setAuthToken } from "../../utils";
 
 const setCurrentUser = user => {
   return { type: usersConstants.SET_CURRENT_USER, user };
@@ -14,13 +15,22 @@ const login = (username, password) => {
 
     authServices
       .login(username, password)
-      .then(user => {
-        localStorage.setItem("user", JSON.stringify(user));
-        dispatch(success(user));
-        dispatch(setCurrentUser(user));
+      .then(data => {
+        // Save to localstorage
+        const { token } = data;
+
+        localStorage.setItem("jwtToken", token);
+        setAuthToken(token);
+
+        // Decode token to get user data
+        const decoded = jwt_decode(token);
+
+        dispatch(success(decoded));
+        dispatch(setCurrentUser(decoded));
         history.push("/admin");
       })
       .catch(error => {
+        dbg("login error", error);
         dispatch(failure(error.data));
         dispatch(alertActions.error("There was an error signing in."));
       });
@@ -71,9 +81,13 @@ const checkPrivileges = (resource, token) => {
 
 const logout = () => {
   return dispatch => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("jwtToken");
+
+    // remove auth header
+    setAuthToken(false);
 
     dispatch(setCurrentUser({}));
+
     history.push("/");
     dispatch(alertActions.info("You have signed out"));
   };
