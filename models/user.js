@@ -1,8 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaType } from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name: {
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
     type: String,
     required: true
   },
@@ -14,18 +18,15 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  roles: {
-    type: Schema.Types.Mixed,
-    required: true
-  },
-  avatar: {
-    type: String
-  },
-  date: {
-    type: Date,
-    default: Date.now
+  groups: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Group"
+    }
+  ],
+  permissions: {
+    type: Schema.Types.Array
   }
 });
 
-const User = mongoose.model("users", userSchema);
-export default User;
+export const User = mongoose.model("users", userSchema);

@@ -18,6 +18,7 @@ import TransitionRoute from "./presentation/parts/TransitionRoute";
 import HomePage from "./connected/pages/HomePage";
 import AdminPage from "./connected/pages/AdminPage";
 import SignInPage from "./connected/pages/SignInPage";
+import InstallPage from "./connected/pages/InstallPage";
 import NotFoundPage from "./connected/pages/NotFound";
 
 class App extends Component {
@@ -70,7 +71,14 @@ class App extends Component {
 
     // TODO refactor the route paths list. This is needed for the
     // catch all route. Router Switch doesn't work with the CSSTransitions
-    const routePaths = ["/", "/signin", "/signin/", "/admin", "/admin/"];
+    const routePaths = [
+      "/",
+      "/signin",
+      "/signin/",
+      "/admin",
+      "/admin/",
+      "/install"
+    ];
 
     return (
       <div className="App">
@@ -86,6 +94,7 @@ class App extends Component {
           <TransitionRoute exact path="/" component={HomePage} />
           <TransitionRoute exact path="/signin" component={SignInPage} />
           <TransitionRoute exact path="/admin" component={AdminPage} />
+          <TransitionRoute exact path="/install" component={InstallPage} />
           <TransitionRoute routePaths={routePaths} component={NotFoundPage} />
           <Footer />
         </Router>
