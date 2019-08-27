@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json(errors);
     }
   } catch (e) {
-    dbg("InstallPage::post / validation", e);
+    dbg("Route::post::install/  validation", e);
     return res.status(500).send(e);
   }
 
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
    * Install the site
    */
 
-  dbg("Installing!");
+  dbg("Route::post::install/ Installing!");
   try {
     await installConfig(req.body.appName);
     await installGroups();
@@ -55,6 +55,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * Danger! Danger! Danger!
+ */
 // router.delete("/install", (req, res) => {
 //   mongoose.connection.collections["users"].drop(function(err) {
 //     console.log("users dropped");
@@ -72,6 +75,29 @@ router.post("/", async (req, res) => {
 //     isInstalled: false
 //   });
 // });
+
+/**
+ * @route   GET api/install/isinstalled
+ * @desc    check to see if an app is already installed
+ * @access  Public
+ */
+router.get("/isinstalled", (req, res) => {
+  Config.findOne({
+    name: "isInstalled"
+  }).then(setting => {
+    if (setting) {
+      return res.json({ isInstalled: true, details: setting.value });
+    } else {
+      return res.json({
+        isInstalled: false
+      });
+    }
+  });
+});
+
+/******************************************************************************
+ * HELPER FUNCTIONS
+ */
 
 async function installConfig(appName) {
   /**

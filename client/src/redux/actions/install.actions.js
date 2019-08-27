@@ -28,6 +28,30 @@ const install = payload => {
   };
 };
 
+const checkInstallation = () => {
+  return dispatch => {
+    dispatch({ type: serviceConstants.POSTBACK_BEGIN });
+    installServices
+      .checkInstallation()
+      .then(result => {
+        if (result === true) {
+          dispatch({ type: installConstants.INSTALL_ISINSTALLED });
+          if (history.location.pathname === "/install") {
+            history.push("/");
+            dispatch(alertActions.warn("Site is already installed!"));
+          }
+        } else {
+          dispatch({ type: installConstants.INSTALL_NOTINSTALLED });
+        }
+      })
+      .catch(error => {
+        dispatch({ type: serviceConstants.POSTBACK_END });
+        dispatch({ type: serviceConstants.POSTBACK_ERROR, error: error.data });
+      });
+  };
+};
+
 export const installActions = {
-  install
+  install,
+  checkInstallation
 };

@@ -16,6 +16,26 @@ const install = payload => {
     });
 };
 
+const checkInstallation = () => {
+  return axios
+    .get("/api/install/isinstalled")
+    .then(response => {
+      if (response.data.isInstalled) {
+        dbg("install.services::checkInstallation - installed", response);
+        return true;
+      } else {
+        dbg("install.services::checkInstallation - not installed", response);
+        return false;
+      }
+    })
+    .catch(error => {
+      const err = Error("Check installation error");
+      err.data = error.response.data;
+      throw err;
+    });
+};
+
 export const installServices = {
-  install
+  install,
+  checkInstallation
 };
