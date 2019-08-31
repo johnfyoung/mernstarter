@@ -1,28 +1,14 @@
 import Validator from "validator";
 import { isEmpty } from "../tools";
 
-export const validateInstallInput = data => {
+export const validateUserRegistration = data => {
   let errors = {};
 
-  data.appName = !isEmpty(data.appName) ? data.appName : "";
   data.userFirstName = !isEmpty(data.userFirstName) ? data.userFirstName : "";
   data.userLastName = !isEmpty(data.userLastName) ? data.userLastName : "";
   data.userEmail = !isEmpty(data.userEmail) ? data.userEmail : "";
   data.userPassword = !isEmpty(data.userPassword) ? data.userPassword : "";
   data.userPassword2 = !isEmpty(data.userPassword2) ? data.userPassword2 : "";
-
-  if (
-    !Validator.isLength(data.appName, {
-      min: 2,
-      max: 30
-    })
-  ) {
-    errors.appName = "App name must be between 2 and 30 characters";
-  }
-
-  if (Validator.isEmpty(data.appName)) {
-    errors.appName = "App name field is required";
-  }
 
   if (
     !Validator.isLength(data.userFirstName, {

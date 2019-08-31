@@ -1,12 +1,6 @@
 import { dbg } from "../utils";
 import axios from "axios";
 
-/**
- * auth services
- *
- * This file is a stub
- */
-
 const login = (email, password) => {
   return axios
     .post("/api/auth/authenticate", { email, password })

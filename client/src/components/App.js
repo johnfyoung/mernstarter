@@ -18,6 +18,7 @@ import HomePage from "./connected/pages/HomePage";
 import AdminPage from "./connected/pages/AdminPage";
 import SignInPage from "./connected/pages/SignInPage";
 import InstallPage from "./connected/pages/InstallPage";
+import RegisterPage from "./connected/pages/RegisterPage";
 import NotFoundPage from "./connected/pages/NotFound";
 
 class App extends Component {
@@ -80,6 +81,8 @@ class App extends Component {
       "/signin/",
       "/admin",
       "/admin/",
+      "/register",
+      "/register/",
       "/install"
     ];
 
@@ -96,6 +99,7 @@ class App extends Component {
           <Header nav={topNav} />
           <TransitionRoute exact path="/" component={HomePage} />
           <TransitionRoute exact path="/signin" component={SignInPage} />
+          <TransitionRoute exact path="/register" component={RegisterPage} />
           <TransitionRoute exact path="/admin" component={AdminPage} />
           <TransitionRoute exact path="/install" component={InstallPage} />
           <TransitionRoute routePaths={routePaths} component={NotFoundPage} />
