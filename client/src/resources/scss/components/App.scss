@@ -11,32 +11,3 @@
   position: relative;
   height: 100vh;
 }
-
-.page {
-  position: absolute;
-  width: 100%;
-}
-
-.fade-enter {
-  & :first-child {
-    opacity: 0;
-  }
-}
-.fade-enter-active {
-  & :first-child {
-    opacity: 1;
-    transition: opacity 300ms;
-  }
-}
-
-.fade-exit {
-  & :first-child {
-    opacity: 1;
-  }
-}
-.fade-exit-active {
-  & :first-child {
-    opacity: 0;
-    transition: opacity 300ms;
-  }
-}

@@ -182,7 +182,7 @@ class InstallPage extends Component {
                       )}
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-primary">
+                  <button type="submit" className="btn btn-primary actionbtn">
                     Install
                   </button>
                 </form>

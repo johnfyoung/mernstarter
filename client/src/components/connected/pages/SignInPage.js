@@ -26,7 +26,7 @@ class SignInPage extends Component {
   };
 
   render() {
-    const { nav, service } = this.props;
+    const { nav, service, loading } = this.props;
     const errors = service.error ? service.error : {};
 
     return (
@@ -46,6 +46,7 @@ class SignInPage extends Component {
                   placeholder="Enter email"
                   value={this.state.email}
                   onChange={this.handleOnChange}
+                  disabled={loading ? "disabled" : ""}
                 />
                 {errors.email && (
                   <div className="invalid-feedback">{errors.email}</div>
@@ -63,13 +64,20 @@ class SignInPage extends Component {
                   placeholder="Password"
                   value={this.state.password}
                   onChange={this.handleOnChange}
+                  disabled={loading ? "disabled" : ""}
                 />
                 {errors.password && (
                   <div className="invalid-feedback">{errors.password}</div>
                 )}
               </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button
+                type="submit"
+                className={`btn btn-primary actionbtn ${
+                  loading ? " spinning" : ""
+                }`}
+                disabled={loading ? "disabled" : ""}
+              >
+                {loading ? "Signing in..." : "Submit"}
               </button>
             </form>
           </div>
@@ -79,8 +87,9 @@ class SignInPage extends Component {
   }
 }
 
-const mapStateToProps = ({ service }) => ({
-  service
+const mapStateToProps = ({ service, loading }) => ({
+  service,
+  loading
 });
 
 const actionCreators = {

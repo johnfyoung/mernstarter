@@ -19,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 //connect to database
 mongoose
   .connect(process.env.MONGODB_URI, {
+    reconnectTries: 100,
+    reconnectInterval: 500,
+    autoReconnect: true,
     useNewUrlParser: true,
     useCreateIndex: true
   })
