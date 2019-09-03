@@ -5,7 +5,12 @@ import { Router } from "react-router-dom";
 import { dbg, history } from "../utils";
 import config from "../config";
 
-import { alertActions, navActions, installActions } from "../redux/actions";
+import {
+  alertActions,
+  navActions,
+  installActions,
+  logActions
+} from "../redux/actions";
 
 import Header from "../components/presentation/parts/Header";
 import Footer from "../components/presentation/parts/Footer";
@@ -34,7 +39,9 @@ class App extends Component {
 
   handleLocationChange = (location, action) => {
     dbg("App::handleLocationChange Changing location app", location);
-    const { nav, locationChange, clearAlert } = this.props;
+    const { nav, locationChange, clearAlert, captureUserEvent } = this.props;
+
+    captureUserEvent({ type: "navigation", path: location.pathname });
 
     if (location.pathname === "/install") {
       this.props.checkInstallation();
@@ -123,7 +130,8 @@ const actionCreators = {
   clearAlert: alertActions.clearAlert,
   locationChange: navActions.locationChanged,
   errorAlert: alertActions.error,
-  checkInstallation: installActions.checkInstallation
+  checkInstallation: installActions.checkInstallation,
+  captureUserEvent: logActions.captureUserEvent
 };
 
 const ConnectedApp = connect(
