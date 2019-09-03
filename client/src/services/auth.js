@@ -18,25 +18,37 @@ const login = (email, password) => {
     });
 };
 
-const isAuthorized = async (resource, token) => {
-  dbg("authServices::isAuthorized", token);
-  // emulate a service request
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (token === "fake token here") {
-        const user = {
-          username: "john@john.com",
-          email: "john@john.com",
-          name: "John Young",
-          exp: Date.now() / 1000 + 60,
-          token: "fake token here"
-        };
-        resolve(user);
-      } else {
-        reject(false);
+const isAuthorized = async resource => {
+  return axios
+    .get("/api/auth/authorize", { params: { resource } })
+    .then(res => {
+      dbg("authServices::isAuthorized response", res);
+      if (res.status === 200) {
+        return res.data;
       }
-    }, 1000);
-  }).then(result => result);
+    })
+    .catch(err => {
+      if (err.status === 401) {
+        throw new Error("Unauthorized");
+      }
+    });
+
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     if (token === "fake token here") {
+  //       const user = {
+  //         username: "john@john.com",
+  //         email: "john@john.com",
+  //         name: "John Young",
+  //         exp: Date.now() / 1000 + 60,
+  //         token: "fake token here"
+  //       };
+  //       resolve(user);
+  //     } else {
+  //       reject(false);
+  //     }
+  //   }, 1000);
+  // }).then(result => result);
 };
 
 const logout = () => {
