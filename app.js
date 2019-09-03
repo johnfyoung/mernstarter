@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { dbg } from "./util/tools";
 
-import { log } from "./middleware/logging";
+import { logRequest } from "./middleware/logging";
 
 require("dotenv").config();
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // logging
 //app.use(morgan("dev"));
-app.use(log({ type: "http-request" }));
+app.use(logRequest());
 
 //connect to database
 mongoose

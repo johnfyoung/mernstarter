@@ -2,7 +2,7 @@ import { createLogger, transports, format } from "winston";
 import "winston-mongodb";
 require("dotenv").config();
 
-const logger = createLogger({
+const apiRequestLogger = createLogger({
   format: format.json(),
   transports: [
     new transports.Console(),
@@ -14,9 +14,9 @@ const logger = createLogger({
   ]
 });
 
-export const log = () => {
+export const logRequest = () => {
   return function(req, res, next) {
-    logger.info("http-request", {
+    apiRequestLogger.info("http-request", {
       metadata: {
         time: new Date(),
         method: req.method,
