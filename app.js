@@ -4,17 +4,20 @@ import mongoose from "mongoose";
 import path from "path";
 import { dbg } from "./util/tools";
 
+import { log } from "./middleware/logging";
+
 require("dotenv").config();
 
 // Get an Express app
 const app = express();
 
-// logging
-app.use(morgan("dev"));
-
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// logging
+//app.use(morgan("dev"));
+app.use(log({ type: "http-request" }));
 
 //connect to database
 mongoose
@@ -25,7 +28,9 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true
   })
-  .then(() => dbg("MongoDB connected"))
+  .then(() => {
+    dbg("MongoDB connected");
+  })
   .catch(err => console.log(err));
 
 // include the routes
