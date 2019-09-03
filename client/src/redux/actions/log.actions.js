@@ -1,7 +1,10 @@
 import { serviceConstants } from "../constants";
+import { logServices } from "../../services";
 
-const log = event => {};
+const captureUserEvent = event => {
+  return { type: serviceConstants.LOG_TYPE_EVENT, event };
+};
 
-const trackEvent = event => {
-  return dispatch => {};
+export const logActions = {
+  captureUserEvent
 };
