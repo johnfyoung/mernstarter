@@ -8,18 +8,21 @@ opts.secretOrKey = process.env.SECRETKEY;
 
 export const passport = passport => {
   passport.use(
-    new JwtStrategy(opts, (jwtPayload, done) => {
-      User.findById(jwtPayload.id)
-        .then(user => {
-          if (user) {
-            dbg("Passport: found user", user);
-            return done(null, user);
-          }
+    new JwtStrategy(opts, async (jwtPayload, done) => {
+      try {
+        const user = await User.findById(jwtPayload.id).exec();
 
-          dbg("Passport: found no user");
-          return done(null, false);
-        })
-        .catch(err => console.log(err));
+        if (user) {
+          dbg("Passport: found user", user);
+          return done(null, user);
+        }
+
+        dbg("Passport: found no user");
+        return done(null, false);
+      } catch (err) {
+        console.log(err);
+        done(err, false);
+      }
     })
   );
 };
