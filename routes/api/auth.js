@@ -40,6 +40,12 @@ router.post("/authenticate", (req, res) => {
           lastName: user.name,
           groups: user.groups
         };
+
+        if (!user.devices.some(device => device.id.equals(req.device.id))) {
+          user.devices.push(req.device);
+          await user.save();
+        }
+
         // Sign the token
         const token = jwt.sign(payload, process.env.SECRETKEY, {
           expiresIn: 3600

@@ -23,8 +23,12 @@ const userEventLogger = createLogger({
 
 // TODO: Validate this input
 router.post("/", (req, res) => {
+  const deviceId = req.device ? req.device.id : null;
   userEventLogger.info("user-event", {
-    metadata: req.body
+    metadata: {
+      ...req.body,
+      device: deviceId
+    }
   });
 
   res.send("ok");
