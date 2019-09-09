@@ -18,6 +18,13 @@ const initialState = {
       label: "Admin",
       privilege: true
     }
+  },
+  submenu: {
+    profile: {
+      path: "/profile",
+      label: "Profile",
+      privilege: true
+    }
   }
 };
 

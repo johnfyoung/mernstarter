@@ -24,3 +24,8 @@ export const logLevels = {
   DEBUG: 4,
   SILLY: 5
 };
+
+export const jwtCookies = {
+  HEADERPAYLOAD: "_au1",
+  SIGNATURE: "_au2"
+};

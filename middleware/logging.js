@@ -15,9 +15,10 @@ const apiRequestLogger = createLogger({
 });
 
 export const logRequest = () => {
-  return function(req, res, next) {
-    apiRequestLogger.info("http-request", {
+  return async (req, res, next) => {
+    const result = await apiRequestLogger.info(req.useragent.source, {
       metadata: {
+        device: req.device ? req.device._id : null,
         time: new Date(),
         method: req.method,
         ip: req.ip,
@@ -26,6 +27,7 @@ export const logRequest = () => {
         xhr: req.xhr
       }
     });
+
     next();
   };
 };

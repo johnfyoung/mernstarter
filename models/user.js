@@ -28,7 +28,8 @@ const userSchema = new Schema({
   ],
   permissions: {
     type: Schema.Types.Array
-  }
+  },
+  devices: [{ type: Schema.Types.ObjectId, ref: "UserDevices" }]
 });
 
 export const User = mongoose.model("users", userSchema);
