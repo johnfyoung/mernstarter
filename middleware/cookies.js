@@ -23,11 +23,6 @@ export const setCookie = () => {
     let device = null;
     if (cookie === undefined) {
       device = await saveNewDevice(req.useragent);
-
-      res.cookie("_did", device.uuid, {
-        maxAge: 900000,
-        httpOnly: true
-      });
     } else {
       device = await UserDevice.findOne({ uuid: cookie }).exec();
 
@@ -35,6 +30,11 @@ export const setCookie = () => {
         device = await saveNewDevice(req.useragent);
       }
     }
+    // set the device cookie expiration for 2 years of inactivity
+    res.cookie("_did", device.uuid, {
+      expires: new Date(Date.now() + 63072000 * 1000),
+      httpOnly: true
+    });
 
     req.device = device;
 
