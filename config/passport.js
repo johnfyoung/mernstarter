@@ -1,9 +1,25 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { dbg } from "../util/tools";
 import { User } from "../models";
+import { jwtCookies } from "../config/constants";
 
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+
+/**
+ * Piece together the JWT from the 2 auth cookies
+ * @param {*} req
+ */
+var cookieExtractor = function(req) {
+  var token = null;
+  if (req && req.cookies) {
+    token = `${req.cookies[jwtCookies.HEADERPAYLOAD]}.${
+      req.cookies[jwtCookies.SIGNATURE]
+    }`;
+  }
+  return token;
+};
+
+opts.jwtFromRequest = ExtractJwt.fromExtractors([cookieExtractor]);
 opts.secretOrKey = process.env.SECRETKEY;
 
 export const passport = passport => {
@@ -13,11 +29,9 @@ export const passport = passport => {
         const user = await User.findById(jwtPayload.id).exec();
 
         if (user) {
-          dbg("Passport: found user", user);
           return done(null, user);
         }
 
-        dbg("Passport: found no user");
         return done(null, false);
       } catch (err) {
         console.log(err);

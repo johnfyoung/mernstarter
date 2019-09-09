@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import { authConstants, usersConstants, serviceConstants } from "../constants";
 import { authServices } from "../../services";
 import { alertActions } from "../actions";
-import { history, dbg, setAuthToken } from "../../utils";
+import { history, dbg, getAuthCookieToken } from "../../utils";
 
 const setCurrentUser = user => {
   return { type: usersConstants.SET_CURRENT_USER, user };
@@ -16,23 +16,28 @@ const login = (username, password) => {
     authServices
       .login(username, password)
       .then(data => {
-        // Save to localstorage
-        const { token } = data;
-
-        localStorage.setItem("jwtToken", token);
-        setAuthToken(token);
-
+        dbg("authActions::login data", data);
+        const token = getAuthCookieToken();
+        dbg("authActions::login token", token);
         // Decode token to get user data
-        const decoded = jwt_decode(token);
-
-        dispatch(success(decoded));
-        dispatch(setCurrentUser(decoded));
+        if (token) {
+          const decoded = jwt_decode(token);
+          dispatch(success(decoded));
+          dispatch(setCurrentUser(decoded));
+        } else {
+          throw new Error(
+            "Unable to get credentials from server. Cookie probably not set, most likely because it had the wrong security setting."
+          );
+        }
         history.push("/admin");
       })
       .catch(error => {
         dbg("login error", error);
         dispatch(failure(error.data));
         dispatch(alertActions.error("There was an error signing in."));
+      })
+      .finally(() => {
+        dispatch({ type: serviceConstants.POSTBACK_END });
       });
   };
 
@@ -44,13 +49,11 @@ const login = (username, password) => {
   }
   function success(user) {
     return dispatch => {
-      dispatch({ type: serviceConstants.POSTBACK_END });
       dispatch({ type: authConstants.LOGIN_SUCCESS, user });
     };
   }
   function failure(error) {
     return dispatch => {
-      dispatch({ type: serviceConstants.POSTBACK_END });
       dispatch({ type: serviceConstants.POSTBACK_ERROR, error });
       dispatch({ type: authConstants.LOGIN_FAILURE, error });
     };
@@ -81,15 +84,26 @@ const checkPrivileges = (resource, token) => {
 
 const logout = () => {
   return dispatch => {
-    localStorage.removeItem("jwtToken");
+    dispatch({ type: serviceConstants.POSTBACK_BEGIN });
+    dispatch({ type: authConstants.LOGOUT_REQUEST });
+    return authServices
+      .logout()
+      .then(result => {
+        if (result === true) {
+          dispatch({ type: authConstants.LOGOUT_SUCCESS });
+          dispatch(setCurrentUser({}));
 
-    // remove auth header
-    setAuthToken(false);
-
-    dispatch(setCurrentUser({}));
-
-    history.push("/");
-    dispatch(alertActions.info("You have signed out"));
+          history.push("/");
+          dispatch(alertActions.info("You have signed out"));
+        }
+      })
+      .catch(err => {
+        dispatch({ type: authConstants.LOGOUT_FAILURE });
+        dispatch({ type: serviceConstants.POSTBACK_ERROR, error: err });
+      })
+      .finally(() => {
+        dispatch({ type: serviceConstants.POSTBACK_END });
+      });
   };
 };
 
