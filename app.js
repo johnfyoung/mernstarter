@@ -1,20 +1,29 @@
 import express from "express";
-import morgan from "morgan";
 import mongoose from "mongoose";
 import path from "path";
+import cookieParser from "cookie-parser";
+import useragent from "express-useragent";
+
 import { dbg } from "./util/tools";
+
+import { logRequest, setCookie } from "./middleware";
 
 require("dotenv").config();
 
 // Get an Express app
 const app = express();
-
-// logging
-app.use(morgan("dev"));
+app.use(useragent.express());
 
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Cookies
+app.use(cookieParser());
+app.use(setCookie());
+
+// logging
+app.use(logRequest());
 
 //connect to database
 mongoose
@@ -25,7 +34,9 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true
   })
-  .then(() => dbg("MongoDB connected"))
+  .then(() => {
+    dbg("MongoDB connected");
+  })
   .catch(err => console.log(err));
 
 // include the routes

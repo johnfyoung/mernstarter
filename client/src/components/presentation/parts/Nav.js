@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { dbg } from "../../../utils";
 
 export default function Nav({ nav, isAuthd, handleSignOut }) {
-  const { brand, menu, hasSearch } = nav;
+  const { brand, menu, submenu, hasSearch } = nav;
   dbg("Nav:: isAuthd", isAuthd);
   dbg("Nav:: Menu", menu);
   return (
@@ -66,13 +66,35 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
           </form>
         )}
         {isAuthd ? (
-          <button
-            className="btn btn-outline-primary my-2 my-sm-0"
-            type="submit"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button>
+          <Fragment>
+            {submenu ? (
+              <ul className="navbar-nav ml-auto">
+                {Object.keys(submenu).map(key => {
+                  return (
+                    <li className="nav-item">
+                      <Link className="nav-link" to={submenu[key].path}>
+                        {submenu[key].label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              ""
+            )}
+            {/* <li className='nav-item d-flex align-items-center'>
+                <span className='text-light'>{user.name}</span>
+                <img src={user.avatar} alt={`Avatar for ${user.name}`} className='rounded-circle mx-2' style={{ width: '35px' }} title='You must have a gravatar connected to your email to have an image' />
+            </li> */}
+
+            <button
+              className="btn btn-outline-primary my-2 my-sm-0"
+              type="submit"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </button>
+          </Fragment>
         ) : (
           <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
             Sign In

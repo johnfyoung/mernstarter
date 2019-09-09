@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { User, Group } from "../../models";
 import { dbg, compare } from "../../util/tools";
 import { validateLoginInput } from "../../util/validation";
+import { jwtCookies } from "../../config/constants";
 
 const router = express.Router();
 require("dotenv").config();
@@ -40,9 +41,38 @@ router.post("/authenticate", (req, res) => {
           lastName: user.name,
           groups: user.groups
         };
+
+        // Check to see if this user is already associated with the requestion device
+        if (
+          !user.devices.some(d => {
+            return req.device._id.equals(d);
+          })
+        ) {
+          try {
+            user.devices.push(req.device);
+            await user.save();
+          } catch (err) {
+            console.log("Error saving user with device change");
+          }
+        }
+
         // Sign the token
         const token = jwt.sign(payload, process.env.SECRETKEY, {
           expiresIn: 3600
+        });
+
+        // Setting the JWT in two cookies
+        // @see https://medium.com/lightrail/getting-token-authentication-right-in-a-stateless-single-page-application-57d0c6474e3
+        const tokenParts = token.split(".");
+        const tokenSignature = tokenParts.pop();
+
+        res.cookie(jwtCookies.HEADERPAYLOAD, tokenParts.join("."), {
+          secure: process.env.COOKIE_SECURE === "false" ? false : true,
+          expires: new Date(Date.now() + 30 * 60000)
+        });
+        res.cookie(jwtCookies.SIGNATURE, tokenSignature, {
+          secure: process.env.COOKIE_SECURE === "false" ? false : true,
+          httpOnly: true
         });
 
         return res.json({
@@ -54,6 +84,25 @@ router.post("/authenticate", (req, res) => {
         return res.status(400).json(errors);
       }
     });
+});
+
+/**
+ * Unset the authentication by unsetting the auth cookies
+ */
+router.delete("/authenticate", (req, res) => {
+  res.cookie(jwtCookies.HEADERPAYLOAD, "", {
+    maxAge: 0,
+    expires: Date.now(),
+    overwrite: true
+  });
+  res.cookie(jwtCookies.SIGNATURE, "", {
+    maxAge: 0,
+    expires: Date.now(),
+    overwrite: true
+  });
+  res.json({
+    success: true
+  });
 });
 
 router.post("/authorize", (req, res) => {

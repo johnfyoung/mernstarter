@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import jwt_decode from "jwt-decode";
 
-import { store, setAuthToken } from "./utils";
+import { store, setRequestedWithHeader, getAuthCookieToken } from "./utils";
 import { authActions } from "./redux/actions";
 
 import "./resources/scss/main.scss";
@@ -11,12 +11,9 @@ import App from "./components/App";
 
 import * as serviceWorker from "./serviceWorker";
 
-if (localStorage.jwtToken) {
-  // Set auth token header auth
-  setAuthToken(localStorage.jwtToken);
-
-  // decode the token
-  const decoded = jwt_decode(localStorage.jwtToken);
+const token = getAuthCookieToken();
+if (token) {
+  const decoded = jwt_decode(token);
 
   // check for expired token
   const currentTime = Date.now() / 1000;
@@ -28,6 +25,8 @@ if (localStorage.jwtToken) {
     store.dispatch(authActions.setCurrentUser(decoded));
   }
 }
+
+setRequestedWithHeader();
 
 ReactDOM.render(
   <Provider store={store}>

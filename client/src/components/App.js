@@ -5,7 +5,12 @@ import { Router } from "react-router-dom";
 import { dbg, history } from "../utils";
 import config from "../config";
 
-import { alertActions, navActions, installActions } from "../redux/actions";
+import {
+  alertActions,
+  navActions,
+  installActions,
+  logActions
+} from "../redux/actions";
 
 import Header from "../components/presentation/parts/Header";
 import Footer from "../components/presentation/parts/Footer";
@@ -16,6 +21,7 @@ import TransitionRoute from "./presentation/parts/TransitionRoute";
 // Pages
 import HomePage from "./connected/pages/HomePage";
 import AdminPage from "./connected/pages/AdminPage";
+import ProfilePage from "./connected/pages/ProfilePage";
 import SignInPage from "./connected/pages/SignInPage";
 import InstallPage from "./connected/pages/InstallPage";
 import RegisterPage from "./connected/pages/RegisterPage";
@@ -34,12 +40,15 @@ class App extends Component {
 
   handleLocationChange = (location, action) => {
     dbg("App::handleLocationChange Changing location app", location);
-    const { nav, locationChange, clearAlert } = this.props;
+    const { nav, locationChange, clearAlert, captureUserEvent } = this.props;
+
+    captureUserEvent({ type: "navigation", path: location.pathname });
 
     if (location.pathname === "/install") {
       this.props.checkInstallation();
     }
 
+    //////////////////////////////////////////////////////////////////////
     // TODO refactor the authorization to paths
     // PrivateRoutes do no work with the CSSTransitions
     if (this.props.isAuthd && location.pathname === "/signin") {
@@ -47,13 +56,17 @@ class App extends Component {
     }
 
     clearAlert();
-    if (!this.props.isAuthd && location.pathname === "/admin") {
+    if (
+      !this.props.isAuthd &&
+      (location.pathname === "/admin" || location.pathname === "/profile")
+    ) {
       history.push("/signin");
       this.props.errorAlert("Please sign in for access");
     }
 
     const activeNavKey = this.getActiveNavKey(nav.menu, location);
     locationChange(activeNavKey);
+    ////////////////////////////////////////////////////////////////////////
 
     const pageLabel = nav.menu[activeNavKey]
       ? ` - ${nav.menu[activeNavKey].label}`
@@ -81,7 +94,7 @@ class App extends Component {
       "/signin/",
       "/admin",
       "/admin/",
-      "/register",
+      "/profile",
       "/register/",
       "/install"
     ];
@@ -101,6 +114,7 @@ class App extends Component {
           <TransitionRoute exact path="/signin" component={SignInPage} />
           <TransitionRoute exact path="/register" component={RegisterPage} />
           <TransitionRoute exact path="/admin" component={AdminPage} />
+          <TransitionRoute exact path="/profile" component={ProfilePage} />
           <TransitionRoute exact path="/install" component={InstallPage} />
           <TransitionRoute routePaths={routePaths} component={NotFoundPage} />
           <Footer />
@@ -123,7 +137,8 @@ const actionCreators = {
   clearAlert: alertActions.clearAlert,
   locationChange: navActions.locationChanged,
   errorAlert: alertActions.error,
-  checkInstallation: installActions.checkInstallation
+  checkInstallation: installActions.checkInstallation,
+  captureUserEvent: logActions.captureUserEvent
 };
 
 const ConnectedApp = connect(
