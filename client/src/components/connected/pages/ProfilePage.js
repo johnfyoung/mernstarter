@@ -2,12 +2,21 @@ import React from "react";
 import { connect } from "react-redux";
 import ConnectedPage from "../../connected/templates/ConnectedPage";
 
-function AdminPage(props) {
+function ProfilePage(props) {
   return (
     <ConnectedPage pageClass="page-admin" nav={props.nav}>
       <div className="row">
-        <div className="col-12">
-          <h1>Administration</h1>
+        <div className="col-sm-6">
+          <div className="card ">
+            <div className="card-header">Your permissions</div>
+            <div className="card-body">
+              <ul>
+                {props.permissions.map(p => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </ConnectedPage>
@@ -21,4 +30,4 @@ const mapStateToProps = ({ auth }) => ({
       : []
 });
 
-export default connect(mapStateToProps)(AdminPage);
+export default connect(mapStateToProps)(ProfilePage);
