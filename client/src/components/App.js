@@ -50,7 +50,7 @@ class App extends Component {
 
     //////////////////////////////////////////////////////////////////////
     // TODO refactor the authorization to paths
-    // PrivateRoutes do no work with the CSSTransitions
+    // PrivateRoutes do not work with the CSSTransitions
     if (this.props.isAuthd && location.pathname === "/signin") {
       history.push("/");
     }
@@ -58,7 +58,7 @@ class App extends Component {
     clearAlert();
     if (
       !this.props.isAuthd &&
-      (location.pathname === "/admin" || location.pathname === "/profile")
+      (location.pathname.startsWith("/admin") || location.pathname === "/profile")
     ) {
       history.push("/signin");
       this.props.errorAlert("Please sign in for access");
@@ -95,6 +95,7 @@ class App extends Component {
       "/admin",
       "/admin/",
       "/profile",
+      "/register",
       "/register/",
       "/install"
     ];

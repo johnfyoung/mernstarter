@@ -14,6 +14,8 @@ const apiRequestLogger = createLogger({
   ]
 });
 
+
+
 export const logRequest = () => {
   return async (req, res, next) => {
     const result = await apiRequestLogger.info(req.useragent.source, {

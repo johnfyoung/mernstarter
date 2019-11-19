@@ -2,7 +2,9 @@ import express from "express";
 
 const router = express.Router();
 
+import { permissions } from "../../config";
 import { dbg, encrypt } from "../../util/tools";
+import { isUserAuthorized } from "../../middleware";
 import { User, Group } from "../../models";
 import { validateUserRegistration } from "../../util/validation";
 
@@ -43,6 +45,10 @@ router.post("/register", async (req, res) => {
     dbg("problem registering", err);
     return res.status(500).json(err);
   }
+});
+
+router.get("/", (req, res, next) => { isUserAuthorized(req, res, next, [permissions.users.all, permissions.users.view]) }, async (req, res, next) => {
+  res.status(200).send("Auth'd for user list");
 });
 
 export default router;
