@@ -14,7 +14,7 @@ const groupSchema = new Schema({
     }
   },
   permissions: {
-    type: Schema.Types.Array
+    type: [String]
   }
 });
 
