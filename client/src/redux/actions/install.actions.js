@@ -1,5 +1,5 @@
 import { installServices } from "../../services";
-import { installConstants, serviceConstants } from "../constants";
+import { installConstants, serviceConstants, navConstants } from "../constants";
 import { alertActions } from "../actions/alert.actions";
 import { history } from "../../utils";
 
@@ -11,6 +11,7 @@ const install = payload => {
       .then(result => {
         dispatch({ type: installConstants.INSTALL_SUCCESSFUL });
         dispatch({ type: serviceConstants.POSTBACK_END });
+        dispatch({ type: navConstants.SET_APPNAME, appName: payload.appName });
         history.push("/");
         dispatch(alertActions.success("Installation successful"));
       })
