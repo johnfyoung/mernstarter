@@ -56,6 +56,14 @@ export function nav(state = initialState, action) {
       }
 
       return state;
+    case navConstants.SET_APPNAME:
+      return {
+        ...state,
+        brand: {
+          ...state.brand,
+          label: action.appName
+        }
+      };
     default:
       return state;
   }
