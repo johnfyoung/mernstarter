@@ -8,7 +8,7 @@ import ConnectedPage from "../templates/ConnectedPage";
 class InstallPage extends Component {
   state = {
     errors: {},
-    appName: "",
+    appName: this.props.appName,
     userFirstName: "",
     userLastName: "",
     userEmail: "",
@@ -75,13 +75,13 @@ class InstallPage extends Component {
                       aria-describedby="appNameHelp"
                       placeholder="Enter an app name"
                       value={this.state.appName}
-                      onChange={e => this.onChange(e, "appName")}
+                      disabled
                     />
                     {errors.appName && (
                       <div className="invalid-feedback">{errors.appName}</div>
                     )}
                     <small id="appNameHelp" className="form-text text-muted">
-                      Used to brand your app
+                      To set the App Name, use the instructions in the README
                     </small>
                   </div>
                   <hr />
@@ -195,8 +195,9 @@ class InstallPage extends Component {
   }
 }
 
-const mapStateToProps = ({ service }) => ({
-  service
+const mapStateToProps = ({ service, nav }) => ({
+  service,
+  appName: nav.brand.label
 });
 
 // const mapDispatchToProps = dispatch => ({
@@ -207,7 +208,4 @@ const actionCreators = {
   install: installActions.install
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators
-)(InstallPage);
+export default connect(mapStateToProps, actionCreators)(InstallPage);

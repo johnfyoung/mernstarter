@@ -4,7 +4,7 @@ import { navConstants } from "../constants";
 const initialState = {
   brand: {
     path: "/",
-    label: "MERN Starter"
+    label: process.env.REACT_APP_NAME
   },
   hasSearch: false,
   menu: {

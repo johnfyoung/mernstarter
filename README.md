@@ -15,6 +15,7 @@ This is a MERN app boilerplate.
 
 ## Usage for development
 
+1. In the root `package.json` set your application's `name` and `displayName`
 1. run `npm i`
 1. duplicate `.env.sample` into `.env`
 1. In the `.env`

@@ -10,7 +10,7 @@
     "start:prod": "npm run server",
     "start:dev": "concurrently \"nodemon --ignore 'client/*' --exec npm run server\" \"npm run client\"",
     "server": "babel-node server.js",
-    "client": "cd client && npm run start",
+    "client": "APP_NAME=$(node -p \"require('./package.json').displayName\") && cd client && env REACT_APP_NAME=\"$APP_NAME\" npm run start",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
