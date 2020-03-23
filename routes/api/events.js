@@ -2,8 +2,6 @@ import express from "express";
 import winston, { createLogger, format } from "winston";
 import "winston-mongodb";
 
-import { dbg } from "../../util/tools";
-
 const router = express.Router();
 require("dotenv").config();
 
