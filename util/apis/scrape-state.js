@@ -10,7 +10,7 @@ const remoteURL = "https://www.doh.wa.gov/Emergencies/Coronavirus";
 export default async () => {
   let result = null;
   try {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 926 });
     await page.goto(remoteURL);
