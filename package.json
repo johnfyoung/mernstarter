@@ -1,8 +1,8 @@
 {
-  "name": "coronavirus",
-  "displayName": "Coronavirus Dashboard",
+  "name": "mernstarter",
+  "displayName": "MERN Starter App",
   "version": "1.0.0",
-  "description": "A dashboard for corona virus stats",
+  "description": "A MERN starter kit",
   "main": "server.js",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "author": "John Young",
   "license": "ISC",
-  "repository": "github:johnfyoung/coronavirus",
+  "repository": "github:johnfyoung/mernstarter",
   "dependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
