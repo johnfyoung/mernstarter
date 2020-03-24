@@ -24,3 +24,7 @@ This is a MERN app boilerplate.
 - set `MONGODB_URI` to the URI of your Mongo database
 - set `SECRETKEY` to a random, 32 character string
 - set `COOKIE_SECURE` to `false` for development, `true` for production
+
+## For Heroku deployment
+
+This app uses Puppeteer which reqiuires a build pack;
