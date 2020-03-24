@@ -11,8 +11,6 @@ import App from "./components/App";
 
 import * as serviceWorker from "./serviceWorker";
 
-console.log("App name", process.env);
-
 const token = getAuthCookieToken();
 if (token) {
   const decoded = jwt_decode(token);

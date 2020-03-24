@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Router } from "react-router-dom";
 
 import { dbg, history } from "../utils";
-import config from "../config";
 
 import {
   alertActions,
@@ -58,7 +57,8 @@ class App extends Component {
     clearAlert();
     if (
       !this.props.isAuthd &&
-      (location.pathname.startsWith("/admin") || location.pathname === "/profile")
+      (location.pathname.startsWith("/admin") ||
+        location.pathname === "/profile")
     ) {
       history.push("/signin");
       this.props.errorAlert("Please sign in for access");
@@ -71,7 +71,7 @@ class App extends Component {
     const pageLabel = nav.menu[activeNavKey]
       ? ` - ${nav.menu[activeNavKey].label}`
       : "";
-    document.title = `${config.siteName}${pageLabel}`;
+    document.title = `${this.props.appName}${pageLabel}`;
   };
 
   getActiveNavKey = (menu, location) => {
@@ -129,7 +129,8 @@ const mapStateToProps = ({ alert, auth, nav }) => {
   return {
     isAuthd: auth.authenticated,
     announcement: alert.announcement,
-    nav
+    nav,
+    appName: nav.brand.label
   };
 };
 
@@ -142,9 +143,6 @@ const actionCreators = {
   captureUserEvent: logActions.captureUserEvent
 };
 
-const ConnectedApp = connect(
-  mapStateToProps,
-  actionCreators
-)(App);
+const ConnectedApp = connect(mapStateToProps, actionCreators)(App);
 
 export default ConnectedApp;
