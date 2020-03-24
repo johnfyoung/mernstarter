@@ -12,7 +12,7 @@
     "server": "babel-node server.js",
     "client": "APP_NAME=$(node -p \"require('./package.json').displayName\") && cd client && env REACT_APP_NAME=\"$APP_NAME\" npm run start",
     "install": "cd client && npm install",
-    "build": "cd client && npm run build",
+    "build": "APP_NAME=$(node -p \"require('./package.json').displayName\") && cd client && env REACT_APP_NAME=\"$APP_NAME\" npm run build",
     "heroku-postbuild": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "getName": "node -p \"require('./package.json').name\"",
