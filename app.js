@@ -28,11 +28,9 @@ app.use(logRequest());
 //connect to database
 mongoose
   .connect(process.env.MONGODB_URI, {
-    reconnectTries: 100,
-    reconnectInterval: 500,
-    autoReconnect: true,
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
   })
   .then(() => {
     dbg("MongoDB connected");
