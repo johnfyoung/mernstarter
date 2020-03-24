@@ -33,3 +33,11 @@ This is a MERN app boilerplate.
 - When launching puppeteer, make sure to pass the `--no-sandbox` argument
 
 - Whitelisting Heroku dyno IP addresses to limit database access is not a good option.
+
+## Jobs
+
+To run a job, make sure to use `babel-node`:
+
+```bash
+npx babel-node jobs/scrapeWAState.js
+```
