@@ -29,3 +29,31 @@ export const jwtCookies = {
   HEADERPAYLOAD: "_au1",
   SIGNATURE: "_au2"
 };
+
+export const dataPullNames = {
+  WASTATE: "wastate"
+};
+
+export const fieldNamesByCounty = {
+  COUNTY: "County",
+  CASES: "Positive/Confirmed Cases",
+  DEATHS: "Deaths"
+};
+
+export const fieldNamesByPosNeg = {
+  RESULT: "Result",
+  COUNT: "Number of Individuals Tested",
+  PERCENT: "Percent"
+};
+
+export const fieldNamesByAge = {
+  AGEGROUP: "Age Group",
+  PCTCASES: "Percent of Cases",
+  PCTDEATHS: "Percent of Deaths"
+};
+
+export const fieldNamesBySex = {
+  SEX: "Sex at Birth",
+  PCTCASES: "Percent of Cases",
+  PCTDEATHS: "Percent of Deaths"
+};

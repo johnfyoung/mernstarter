@@ -4,3 +4,4 @@ export * from "./async";
 export * from "./crypt";
 export * from "./auth";
 export * from "./logging";
+export * from "./datetime";

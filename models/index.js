@@ -2,3 +2,8 @@ export * from "./config";
 export * from "./user";
 export * from "./userdevice";
 export * from "./group";
+export * from "./datapull";
+export * from "./casesByAge";
+export * from "./casesByCounty";
+export * from "./casesByPosNeg";
+export * from "./casesBySex";
