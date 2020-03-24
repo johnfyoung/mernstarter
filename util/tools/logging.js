@@ -9,13 +9,13 @@ const reqestDeniedLogger = createLogger({
     new transports.MongoDB({
       level: "info",
       db: process.env.MONGODB_URI,
-      collection: "deniedRequests"
+      collection: "logDeniedRequests"
     })
   ]
 });
 
 export const logDeniedRequest = async data => {
-  const result = await reqestDeniedLogger.info(data.req.useragent.source, {
+  await reqestDeniedLogger.info(data.req.useragent.source, {
     metadata: {
       device: data.req.device ? data.req.device._id : null,
       time: new Date(),
@@ -35,15 +35,44 @@ const errorLogger = createLogger({
     new transports.MongoDB({
       level: "error",
       db: process.env.MONGODB_URI,
-      collection: "errors"
+      collection: "logErrors"
     })
   ]
 });
 
 export const logError = async message => {
-  const result = await errorLogger.error(message, {
+  await errorLogger.error(message, {
     metadata: {
       time: new Date()
     }
   });
 };
+
+const jobLogger = createLogger({
+  format: format.json(),
+  transports: [
+    new transports.Console(),
+    new transports.MongoDB({
+      level: "info",
+      db: process.env.MONGODB_URI,
+      collection: "logJobs"
+    })
+  ]
+});
+
+export const logJob = async message => {
+  await jobLogger.info(message, {
+    metadata: {
+      time: new Date()
+    }
+  });
+
+  await waitForLogger(jobLogger);
+};
+
+function waitForLogger(logger) {
+  return new Promise(resolve => {
+    logger.on("finish", resolve);
+    logger.end();
+  });
+}
