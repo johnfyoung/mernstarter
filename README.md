@@ -11,11 +11,12 @@ This is a MERN app boilerplate.
 - Redux
 - JWT tokens
 - User authentication
+- App configuration in the package.json
 - an installer screen
 
 ## Usage for development
 
-1. In the root `package.json` set your application's `name` and `displayName`
+1. In the root `package.json` set your application's `name`, `displayName` and `author`
 1. run `npm i`
 1. duplicate `.env.sample` into `.env`
 1. In the `.env`
