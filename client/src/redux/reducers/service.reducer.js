@@ -1,6 +1,8 @@
-import { authConstants, serviceConstants } from "../constants";
+import { authConstants, serviceConstants, geolocService } from "../constants";
 
-export function service(state = {}, action) {
+const initialState = {};
+
+export function service(state = initialState, action) {
   switch (action.type) {
     case serviceConstants.POSTBACK_BEGIN:
       return {};
@@ -11,6 +13,16 @@ export function service(state = {}, action) {
       };
     case authConstants.LOGIN_SUCCESS:
       return {};
+    case serviceConstants.GEOCODE_ALLOW:
+      return {
+        ...state,
+        latlong: action.payload
+      };
+    case serviceConstants.GEOCODE_REVERSE_USERLOOKUP:
+      return {
+        ...state,
+        geoloc: action.payload
+      };
     default:
       return state;
   }
