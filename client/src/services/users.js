@@ -5,13 +5,13 @@ const register = user => {
   return axios
     .post("/api/users/register", user)
     .then(res => {
-      dbg("usersServices::register response", res);
+      dbg.log("usersServices::register response", res);
       if (res.status === 200) {
         return res.data;
       }
     })
     .catch(error => {
-      dbg("usersServices::register error", error.response);
+      dbg.log("usersServices::register error", error.response);
       let err = null;
       switch (error.response.status) {
         case 400:

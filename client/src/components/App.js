@@ -33,8 +33,8 @@ class App extends Component {
   // }
 
   componentDidMount = () => {
-    dbg("App::componentDidMount props", this.props);
-    dbg("App::componentDidMount history post App mount", history);
+    dbg.log("App::componentDidMount props", this.props);
+    dbg.log("App::componentDidMount history post App mount", history);
     this.props.announce("Here is a site wide announcement");
 
     if (navigator.geolocation) {
@@ -48,18 +48,10 @@ class App extends Component {
 
   handleGeoLocation = position => {
     this.props.lookupUserLocation(position.coords.latitude, position.coords.longitude);
-
-
-    // this.setState({
-    //   geolocation: {
-    //     lat: position.coords.latitude,
-    //     long: position.coords.longitude
-    //   }
-    // });
   };
 
   handleLocationChange = (location, action) => {
-    dbg("App::handleLocationChange Changing location app", location);
+    dbg.log("App::handleLocationChange Changing location app", location);
     const { nav, locationChange, clearAlert, captureUserEvent } = this.props;
 
     captureUserEvent({ type: "navigation", path: location.pathname });

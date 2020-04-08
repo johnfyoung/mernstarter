@@ -1,0 +1,9 @@
+language: node_js
+node_js: "10"
+branches:
+  only:
+    - master
+services: mongodb
+cache:
+  directories:
+    - node_modules

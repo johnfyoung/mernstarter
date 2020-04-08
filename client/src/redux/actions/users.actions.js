@@ -18,7 +18,7 @@ const register = user => {
         dispatch({ type: serviceConstants.POSTBACK_END });
       })
       .catch(error => {
-        dbg("usersActions::register error ", error.message);
+        dbg.log("usersActions::register error ", error.message);
         dispatch(alertActions.error(error.message));
         dispatch({ type: serviceConstants.POSTBACK_END });
         dispatch({ type: serviceConstants.POSTBACK_ERROR, error: error.data });

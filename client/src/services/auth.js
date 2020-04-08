@@ -16,13 +16,13 @@ const login = (email, password) => {
       { withCredenitals: true }
     )
     .then(res => {
-      dbg("authServices::login response", res);
+      dbg.log("authServices::login response", res);
       if (res.status === 200) {
         return res.data;
       }
     })
     .catch(error => {
-      dbg("authServices::login error", error);
+      dbg.log("authServices::login error", error);
       const err = Error("Authentication error");
       err.data = error.response.data;
       throw err;
@@ -39,7 +39,7 @@ const isAuthorized = async resource => {
   return axios
     .get("/api/auth/authorize", { params: { resource } })
     .then(res => {
-      dbg("authServices::isAuthorized response", res);
+      dbg.log("authServices::isAuthorized response", res);
       if (res.status === 200) {
         return res.data;
       }
@@ -58,7 +58,7 @@ const logout = () => {
   return axios
     .delete("/api/auth/authenticate")
     .then(res => {
-      dbg("authServices::logout res.data", res.data);
+      dbg.log("authServices::logout res.data", res.data);
       return res.data.success;
     })
     .catch(err => {

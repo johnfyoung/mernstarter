@@ -10,7 +10,7 @@ class ConnectedNav extends Component {
   render() {
     const { isAuthd, nav, logout } = this.props;
 
-    dbg("ConnectedNav::render nav", nav);
+    dbg.log("ConnectedNav::render nav", nav);
 
     return <Nav nav={nav} isAuthd={isAuthd} handleSignOut={logout} />;
   }

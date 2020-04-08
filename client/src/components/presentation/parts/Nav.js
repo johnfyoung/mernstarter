@@ -4,8 +4,8 @@ import { dbg } from "../../../utils";
 
 export default function Nav({ nav, isAuthd, handleSignOut }) {
   const { brand, menu, submenu, hasSearch } = nav;
-  dbg("Nav:: isAuthd", isAuthd);
-  dbg("Nav:: Menu", menu);
+  dbg.log("Nav:: isAuthd", isAuthd);
+  dbg.log("Nav:: Menu", menu);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       {brand && (
@@ -40,8 +40,8 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
                       {menu[key].active ? (
                         <span className="sr-only">(current)</span>
                       ) : (
-                        ""
-                      )}
+                          ""
+                        )}
                     </Link>
                   </li>
                 );
@@ -80,8 +80,8 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
                 })}
               </ul>
             ) : (
-              ""
-            )}
+                ""
+              )}
             {/* <li className='nav-item d-flex align-items-center'>
                 <span className='text-light'>{user.name}</span>
                 <img src={user.avatar} alt={`Avatar for ${user.name}`} className='rounded-circle mx-2' style={{ width: '35px' }} title='You must have a gravatar connected to your email to have an image' />
@@ -96,10 +96,10 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
             </button>
           </Fragment>
         ) : (
-          <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
-            Sign In
+            <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
+              Sign In
           </Link>
-        )}
+          )}
       </div>
     </nav>
   );

@@ -16,9 +16,9 @@ const login = (username, password) => {
     authServices
       .login(username, password)
       .then(data => {
-        dbg("authActions::login data", data);
+        dbg.log("authActions::login data", data);
         const token = getAuthCookieToken();
-        dbg("authActions::login token", token);
+        dbg.log("authActions::login token", token);
         // Decode token to get user data
         if (token) {
           const decoded = jwt_decode(token);
@@ -32,7 +32,7 @@ const login = (username, password) => {
         history.push("/admin");
       })
       .catch(error => {
-        dbg("login error", error);
+        dbg.log("login error", error);
         dispatch(failure(error.data));
         dispatch(alertActions.error("There was an error signing in."));
       })
@@ -61,15 +61,15 @@ const login = (username, password) => {
 };
 
 const checkPrivileges = (resource, token) => {
-  dbg("authActions::checkPrivileges starting...");
+  dbg.log("authActions::checkPrivileges starting...");
   return dispatch => {
     return authServices.isAuthorized(resource, token).then(
       user => {
-        dbg("authActions::checkPrivileges isAuthorized", user);
+        dbg.log("authActions::checkPrivileges isAuthorized", user);
         localStorage.setItem("user", JSON.stringify(user));
       },
       error => {
-        dbg("authActions::checkPrivileges error", error);
+        dbg.log("authActions::checkPrivileges error", error);
         dispatch(failure(error.toString()));
         dispatch(alertActions.error("Please sign in for access"));
         history.push("/signin");

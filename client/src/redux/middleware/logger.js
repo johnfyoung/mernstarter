@@ -7,11 +7,11 @@ import { logServices } from "../../services";
  * @param {Object} store
  */
 export const logger = store => next => action => {
-  console.group(action.type);
-  dbg("The action: ", action);
+  dbg.group(action.type);
+  dbg.log("The action: ", action);
   const returnValue = next(action);
-  dbg("The new state", store.getState());
-  console.groupEnd();
+  dbg.log("The new state", store.getState());
+  dbg.groupEnd();
 
   return returnValue;
 };
