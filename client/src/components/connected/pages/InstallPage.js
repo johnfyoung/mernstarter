@@ -38,7 +38,7 @@ class InstallPage extends Component {
 
     this.props.install(site);
 
-    dbg("InstallPage::submit props", this.props);
+    dbg.log("InstallPage::submit props", this.props);
   };
 
   onChange = (e, field) => {
@@ -70,7 +70,7 @@ class InstallPage extends Component {
                       type="appName"
                       className={`form-control ${
                         errors.appName ? "is-invalid" : ""
-                      }`}
+                        }`}
                       id="appName"
                       aria-describedby="appNameHelp"
                       placeholder="Enter an app name"
@@ -93,7 +93,7 @@ class InstallPage extends Component {
                         type="userFirstName"
                         className={`form-control ${
                           errors.userFirstName ? "is-invalid" : ""
-                        }`}
+                          }`}
                         id="userFirstName"
                         placeholder="Enter first name"
                         value={this.state.userFirstName}
@@ -111,7 +111,7 @@ class InstallPage extends Component {
                         type="userLastName"
                         className={`form-control ${
                           errors.userLastName ? "is-invalid" : ""
-                        }`}
+                          }`}
                         id="userLastlName"
                         placeholder="Enter last name"
                         value={this.state.userLastName}
@@ -129,7 +129,7 @@ class InstallPage extends Component {
                         type="email"
                         className={`form-control ${
                           errors.userEmail ? "is-invalid" : ""
-                        }`}
+                          }`}
                         id="userEmail"
                         aria-describedby="emailHelp"
                         placeholder="Enter email"
@@ -151,7 +151,7 @@ class InstallPage extends Component {
                         type="password"
                         className={`form-control ${
                           errors.userPassword ? "is-invalid" : ""
-                        }`}
+                          }`}
                         id="userPassword"
                         placeholder="Password"
                         value={this.state.userPassword}
@@ -169,7 +169,7 @@ class InstallPage extends Component {
                         type="password"
                         className={`form-control ${
                           errors.userPassword2 ? "is-invalid" : ""
-                        }`}
+                          }`}
                         id="userPassword2"
                         placeholder="Confirm Password"
                         value={this.state.userPassword2}

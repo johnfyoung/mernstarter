@@ -6,8 +6,8 @@ import { dbg } from "../../../utils";
 class PrivateRoute extends Component {
   render() {
     const { component: Component, path, ...rest } = this.props;
-    dbg("PrivateRoute:: path", path);
-    dbg(
+    dbg.log("PrivateRoute:: path", path);
+    dbg.log(
       "PrivateRoute:: is allowed?",
       localStorage.getItem("user") ? "true" : "false"
     );
@@ -19,8 +19,8 @@ class PrivateRoute extends Component {
           localStorage.getItem("user") ? (
             <Component {...props} />
           ) : (
-            <Redirect to="/signin" />
-          )
+              <Redirect to="/signin" />
+            )
         }
       />
     );

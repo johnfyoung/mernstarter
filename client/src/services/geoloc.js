@@ -3,7 +3,7 @@ import axios from "axios";
 
 const reverseGeocode = (lat, long) => {
     return axios.get(`/api/geoloc/reverse/${lat}/${long}`).then(res => {
-        dbg("geolocServices::reverseGeocode response", res);
+        dbg.log("geolocServices::reverseGeocode response", res);
 
         if (res.status === 200) {
             return res.data;

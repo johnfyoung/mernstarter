@@ -19,7 +19,7 @@ class SignInPage extends Component {
   };
 
   handleSubmit = e => {
-    dbg("SignInPage::handleSubmit event", e);
+    dbg.log("SignInPage::handleSubmit event", e);
     e.preventDefault();
 
     this.props.login(this.state.email, this.state.password);
@@ -58,7 +58,7 @@ class SignInPage extends Component {
                   type="password"
                   className={`form-control ${
                     errors.password ? "is-invalid" : ""
-                  }`}
+                    }`}
                   id="password"
                   name="password"
                   placeholder="Password"
@@ -74,7 +74,7 @@ class SignInPage extends Component {
                 type="submit"
                 className={`btn btn-primary actionbtn ${
                   loading ? " spinning" : ""
-                }`}
+                  }`}
                 disabled={loading ? "disabled" : ""}
               >
                 {loading ? "Signing in..." : "Submit"}

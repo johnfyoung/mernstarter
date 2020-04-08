@@ -19,7 +19,7 @@ class RegisterPage extends Component {
 
     this.props.register(this.state);
 
-    dbg("RegisterPage::submit props", this.props);
+    dbg.log("RegisterPage::submit props", this.props);
   };
 
   onChange = (e, field) => {
@@ -45,7 +45,7 @@ class RegisterPage extends Component {
                 type="userFirstName"
                 className={`form-control ${
                   errors.userFirstName ? "is-invalid" : ""
-                }`}
+                  }`}
                 id="userFirstName"
                 placeholder="Enter first name"
                 value={this.state.userFirstName}
@@ -62,7 +62,7 @@ class RegisterPage extends Component {
                 type="userLastName"
                 className={`form-control ${
                   errors.userLastName ? "is-invalid" : ""
-                }`}
+                  }`}
                 id="userLastlName"
                 placeholder="Enter last name"
                 value={this.state.userLastName}
@@ -79,7 +79,7 @@ class RegisterPage extends Component {
                 type="email"
                 className={`form-control ${
                   errors.userEmail ? "is-invalid" : ""
-                }`}
+                  }`}
                 id="userEmail"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
@@ -100,7 +100,7 @@ class RegisterPage extends Component {
                 type="password"
                 className={`form-control ${
                   errors.userPassword ? "is-invalid" : ""
-                }`}
+                  }`}
                 id="userPassword"
                 placeholder="Password"
                 value={this.state.userPassword}
@@ -117,7 +117,7 @@ class RegisterPage extends Component {
                 type="password"
                 className={`form-control ${
                   errors.userPassword2 ? "is-invalid" : ""
-                }`}
+                  }`}
                 id="userPassword2"
                 placeholder="Confirm Password"
                 value={this.state.userPassword2}
@@ -133,7 +133,7 @@ class RegisterPage extends Component {
                 type="submit"
                 className={`btn btn-primary actionbtn ${
                   loading ? " spinning" : ""
-                }`}
+                  }`}
                 disabled={loading ? "disabled" : ""}
               >
                 Register
