@@ -8,7 +8,8 @@ import {
   alertActions,
   navActions,
   installActions,
-  logActions
+  logActions,
+  geolocActions
 } from "../redux/actions";
 
 import Header from "../components/presentation/parts/Header";
@@ -27,14 +28,34 @@ import RegisterPage from "./connected/pages/RegisterPage";
 import NotFoundPage from "./connected/pages/NotFound";
 
 class App extends Component {
+  // state = {
+  //   geolocation: null
+  // }
+
   componentDidMount = () => {
     dbg("App::componentDidMount props", this.props);
     dbg("App::componentDidMount history post App mount", history);
     this.props.announce("Here is a site wide announcement");
 
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.handleGeoLocation, function () { /*no op*/ });
+    }
+
     history.listen(this.handleLocationChange);
 
     this.handleLocationChange(history.location, "PUSH");
+  };
+
+  handleGeoLocation = position => {
+    this.props.lookupUserLocation(position.coords.latitude, position.coords.longitude);
+
+
+    // this.setState({
+    //   geolocation: {
+    //     lat: position.coords.latitude,
+    //     long: position.coords.longitude
+    //   }
+    // });
   };
 
   handleLocationChange = (location, action) => {
@@ -100,6 +121,8 @@ class App extends Component {
       "/install"
     ];
 
+    const { geoloc } = this.props;
+
     return (
       <div className="App">
         {announcement && announcement.message && (
@@ -108,6 +131,8 @@ class App extends Component {
             message={announcement.message}
           />
         )}
+
+        {geoloc ? <div className="geolocation-bar alert-secondary text-center py-3"><strong>Your location:</strong> {geoloc.address.city}, {geoloc.address.county} County, {geoloc.address.state}</div> : ""}
 
         <Router history={history}>
           <Header nav={topNav} />
@@ -125,12 +150,13 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ alert, auth, nav }) => {
+const mapStateToProps = ({ alert, auth, nav, service }) => {
   return {
     isAuthd: auth.authenticated,
     announcement: alert.announcement,
     nav,
-    appName: nav.brand.label
+    appName: nav.brand.label,
+    geoloc: service.geoloc
   };
 };
 
@@ -140,7 +166,8 @@ const actionCreators = {
   locationChange: navActions.locationChanged,
   errorAlert: alertActions.error,
   checkInstallation: installActions.checkInstallation,
-  captureUserEvent: logActions.captureUserEvent
+  captureUserEvent: logActions.captureUserEvent,
+  lookupUserLocation: geolocActions.lookupUserLocation
 };
 
 const ConnectedApp = connect(mapStateToProps, actionCreators)(App);

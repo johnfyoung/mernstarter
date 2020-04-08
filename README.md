@@ -13,6 +13,7 @@ This is a MERN app boilerplate.
 - User authentication
 - App configuration in the package.json
 - an installer screen
+- Geolocation through Location IQ
 
 ## Usage for development
 
@@ -25,3 +26,4 @@ This is a MERN app boilerplate.
 - set `MONGODB_URI` to the URI of your Mongo database
 - set `SECRETKEY` to a random, 32 character string
 - set `COOKIE_SECURE` to `false` for development, `true` for production
+- set `APIKEY_LOCATIONIQ` to your Location IQ API key

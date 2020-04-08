@@ -4,3 +4,4 @@ export * from "./nav.actions";
 export * from "./install.actions";
 export * from "./users.actions";
 export * from "./log.actions";
+export * from "./geoloc.actions";
