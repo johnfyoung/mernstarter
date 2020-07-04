@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.get("*", (req, res) => {
     console.log("Got a different route!");
-    res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
   });
 }
 
