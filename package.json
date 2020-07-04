@@ -47,8 +47,8 @@
     "passport-jwt": "^4.0.0",
     "uuid": "^3.3.3",
     "validator": "^11.1.0",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.6",
+    "webpack": "4.42.0",
+    "webpack-cli": "^3.3.12",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
   },
