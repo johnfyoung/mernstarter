@@ -44,7 +44,7 @@ app.use(routes);
 // Serve static assets if in production and not found
 if (process.env.NODE_ENV === "production") {
   //Set Static folder
-  app.use(express.static("client/build"));
+  app.use(express.static("../client/build"));
 
   app.get("*", (req, res) => {
     console.log("Got a different route!");
