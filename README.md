@@ -7,7 +7,7 @@ This is a MERN app boilerplate.
 - MERN Stack
 - Bootstrap
 - Mongoose
-- Babel transpiling for the Express server which allows for ES2017
+- Babel transpiling for the Express server which allows for the latest Javascript syntax (babel preset-env)
 - Redux
 - JWT tokens
 - User authentication
