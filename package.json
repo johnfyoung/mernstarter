@@ -1,6 +1,6 @@
 {
   "name": "mernstarter",
-  "displayName": "MERN Starter App",
+  "displayName": "MERN Starter App Refactor",
   "version": "1.0.0",
   "description": "A MERN starter kit",
   "main": "server.js",
