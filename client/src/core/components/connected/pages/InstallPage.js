@@ -13,10 +13,10 @@ class InstallPage extends Component {
     userLastName: "",
     userEmail: "",
     userPassword: "",
-    userPassword2: ""
+    userPassword2: "",
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
     const {
       appName,
@@ -24,7 +24,7 @@ class InstallPage extends Component {
       userLastName,
       userEmail,
       userPassword,
-      userPassword2
+      userPassword2,
     } = this.state;
 
     const site = {
@@ -33,7 +33,7 @@ class InstallPage extends Component {
       userLastName,
       userEmail,
       userPassword,
-      userPassword2
+      userPassword2,
     };
 
     this.props.install(site);
@@ -43,7 +43,7 @@ class InstallPage extends Component {
 
   onChange = (e, field) => {
     this.setState({
-      [field]: e.target.value
+      [field]: e.target.value,
     });
   };
 
@@ -70,7 +70,7 @@ class InstallPage extends Component {
                       type="appName"
                       className={`form-control ${
                         errors.appName ? "is-invalid" : ""
-                        }`}
+                      }`}
                       id="appName"
                       aria-describedby="appNameHelp"
                       placeholder="Enter an app name"
@@ -93,11 +93,11 @@ class InstallPage extends Component {
                         type="userFirstName"
                         className={`form-control ${
                           errors.userFirstName ? "is-invalid" : ""
-                          }`}
+                        }`}
                         id="userFirstName"
                         placeholder="Enter first name"
                         value={this.state.userFirstName}
-                        onChange={e => this.onChange(e, "userFirstName")}
+                        onChange={(e) => this.onChange(e, "userFirstName")}
                       />
                       {errors.userFirstName && (
                         <div className="invalid-feedback">
@@ -111,11 +111,11 @@ class InstallPage extends Component {
                         type="userLastName"
                         className={`form-control ${
                           errors.userLastName ? "is-invalid" : ""
-                          }`}
+                        }`}
                         id="userLastlName"
                         placeholder="Enter last name"
                         value={this.state.userLastName}
-                        onChange={e => this.onChange(e, "userLastName")}
+                        onChange={(e) => this.onChange(e, "userLastName")}
                       />
                       {errors.userLastName && (
                         <div className="invalid-feedback">
@@ -129,12 +129,12 @@ class InstallPage extends Component {
                         type="email"
                         className={`form-control ${
                           errors.userEmail ? "is-invalid" : ""
-                          }`}
+                        }`}
                         id="userEmail"
                         aria-describedby="emailHelp"
                         placeholder="Enter email"
                         value={this.state.userEmail}
-                        onChange={e => this.onChange(e, "userEmail")}
+                        onChange={(e) => this.onChange(e, "userEmail")}
                       />
                       {errors.userEmail && (
                         <div className="invalid-feedback">
@@ -151,11 +151,11 @@ class InstallPage extends Component {
                         type="password"
                         className={`form-control ${
                           errors.userPassword ? "is-invalid" : ""
-                          }`}
+                        }`}
                         id="userPassword"
                         placeholder="Password"
                         value={this.state.userPassword}
-                        onChange={e => this.onChange(e, "userPassword")}
+                        onChange={(e) => this.onChange(e, "userPassword")}
                       />
                       {errors.userPassword && (
                         <div className="invalid-feedback">
@@ -169,11 +169,11 @@ class InstallPage extends Component {
                         type="password"
                         className={`form-control ${
                           errors.userPassword2 ? "is-invalid" : ""
-                          }`}
+                        }`}
                         id="userPassword2"
                         placeholder="Confirm Password"
                         value={this.state.userPassword2}
-                        onChange={e => this.onChange(e, "userPassword2")}
+                        onChange={(e) => this.onChange(e, "userPassword2")}
                       />
                       {errors.userPassword2 && (
                         <div className="invalid-feedback">
@@ -197,7 +197,7 @@ class InstallPage extends Component {
 
 const mapStateToProps = ({ service, nav }) => ({
   service,
-  appName: nav.brand.label
+  appName: nav.brand.label,
 });
 
 // const mapDispatchToProps = dispatch => ({
@@ -205,7 +205,7 @@ const mapStateToProps = ({ service, nav }) => ({
 // });
 
 const actionCreators = {
-  install: installActions.install
+  install: installActions.install,
 };
 
 export default connect(mapStateToProps, actionCreators)(InstallPage);

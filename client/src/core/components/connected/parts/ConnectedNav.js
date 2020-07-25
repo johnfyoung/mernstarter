@@ -19,15 +19,12 @@ class ConnectedNav extends Component {
 const mapStateToProps = ({ auth, nav }) => {
   return {
     isAuthd: auth.authenticated ? true : false,
-    nav
+    nav,
   };
 };
 
 const actionCreators = {
-  logout: authActions.logout
+  logout: authActions.logout,
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators
-)(ConnectedNav);
+export default connect(mapStateToProps, actionCreators)(ConnectedNav);

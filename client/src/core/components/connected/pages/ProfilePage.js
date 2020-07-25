@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import ConnectedPage from "../../connected/templates/ConnectedPage";
+import ConnectedPage from "../templates/ConnectedPage";
 
 function ProfilePage(props) {
   return (
@@ -11,7 +11,7 @@ function ProfilePage(props) {
             <div className="card-header">Your permissions</div>
             <div className="card-body">
               <ul>
-                {props.permissions.map(p => (
+                {props.permissions.map((p) => (
                   <li key={p}>{p}</li>
                 ))}
               </ul>
@@ -27,7 +27,7 @@ const mapStateToProps = ({ auth }) => ({
   permissions:
     auth.user && auth.user.groups
       ? auth.user.groups.reduce((accum, g) => accum.concat(g.permissions), [])
-      : []
+      : [],
 });
 
 export default connect(mapStateToProps)(ProfilePage);

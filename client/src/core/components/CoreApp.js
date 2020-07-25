@@ -9,11 +9,11 @@ import {
   navActions,
   installActions,
   logActions,
-  geolocActions
+  geolocActions,
 } from "../redux/actions";
 
-import Header from "../components/presentation/parts/Header";
-import Footer from "../components/presentation/parts/Footer";
+import Header from "./presentation/parts/Header";
+import Footer from "./presentation/parts/Footer";
 import ConnectedNav from "./connected/parts/ConnectedNav";
 import Announcement from "./presentation/parts/Announcement";
 import TransitionRoute from "./presentation/parts/TransitionRoute";
@@ -27,18 +27,19 @@ import InstallPage from "./connected/pages/InstallPage";
 import RegisterPage from "./connected/pages/RegisterPage";
 import NotFoundPage from "./connected/pages/NotFound";
 
-class App extends Component {
-  // state = {
-  //   geolocation: null
-  // }
-
+class CoreApp extends Component {
   componentDidMount = () => {
     dbg.log("App::componentDidMount props", this.props);
     dbg.log("App::componentDidMount history post App mount", history);
     this.props.announce("Here is a site wide announcement");
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.handleGeoLocation, function () { /*no op*/ });
+      navigator.geolocation.getCurrentPosition(
+        this.handleGeoLocation,
+        function() {
+          /*no op*/
+        }
+      );
     }
 
     history.listen(this.handleLocationChange);
@@ -46,8 +47,11 @@ class App extends Component {
     this.handleLocationChange(history.location, "PUSH");
   };
 
-  handleGeoLocation = position => {
-    this.props.lookupUserLocation(position.coords.latitude, position.coords.longitude);
+  handleGeoLocation = (position) => {
+    this.props.lookupUserLocation(
+      position.coords.latitude,
+      position.coords.longitude
+    );
   };
 
   handleLocationChange = (location, action) => {
@@ -89,7 +93,7 @@ class App extends Component {
 
   getActiveNavKey = (menu, location) => {
     const active = Object.keys(menu).filter(
-      key => menu[key].path === location.pathname
+      (key) => menu[key].path === location.pathname
     );
 
     return active.length > 0 ? active[0] : null;
@@ -110,7 +114,7 @@ class App extends Component {
       "/profile",
       "/register",
       "/register/",
-      "/install"
+      "/install",
     ];
 
     const { geoloc } = this.props;
@@ -124,7 +128,14 @@ class App extends Component {
           />
         )}
 
-        {geoloc ? <div className="geolocation-bar alert-secondary text-center py-3"><strong>Your location:</strong> {geoloc.address.city}, {geoloc.address.county} County, {geoloc.address.state}</div> : ""}
+        {geoloc ? (
+          <div className="geolocation-bar alert-secondary text-center py-3">
+            <strong>Your location:</strong> {geoloc.address.city},{" "}
+            {geoloc.address.county} County, {geoloc.address.state}
+          </div>
+        ) : (
+          ""
+        )}
 
         <Router history={history}>
           <Header nav={topNav} />
@@ -148,7 +159,7 @@ const mapStateToProps = ({ alert, auth, nav, service }) => {
     announcement: alert.announcement,
     nav,
     appName: nav.brand.label,
-    geoloc: service.geoloc
+    geoloc: service.geoloc,
   };
 };
 
@@ -159,9 +170,9 @@ const actionCreators = {
   errorAlert: alertActions.error,
   checkInstallation: installActions.checkInstallation,
   captureUserEvent: logActions.captureUserEvent,
-  lookupUserLocation: geolocActions.lookupUserLocation
+  lookupUserLocation: geolocActions.lookupUserLocation,
 };
 
-const ConnectedApp = connect(mapStateToProps, actionCreators)(App);
+const ConnectedApp = connect(mapStateToProps, actionCreators)(CoreApp);
 
 export default ConnectedApp;

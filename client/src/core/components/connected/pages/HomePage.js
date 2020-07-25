@@ -1,5 +1,5 @@
 import React from "react";
-import ConnectedPage from "../../connected/templates/ConnectedPage";
+import ConnectedPage from "../templates/ConnectedPage";
 
 export default function HomePage(props) {
   return (

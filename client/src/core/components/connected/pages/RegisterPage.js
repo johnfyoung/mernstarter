@@ -11,10 +11,10 @@ class RegisterPage extends Component {
     userLastName: "",
     userEmail: "",
     userPassword: "",
-    userPassword2: ""
+    userPassword2: "",
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     this.props.register(this.state);
@@ -24,7 +24,7 @@ class RegisterPage extends Component {
 
   onChange = (e, field) => {
     this.setState({
-      [field]: e.target.value
+      [field]: e.target.value,
     });
   };
   render() {
@@ -45,11 +45,11 @@ class RegisterPage extends Component {
                 type="userFirstName"
                 className={`form-control ${
                   errors.userFirstName ? "is-invalid" : ""
-                  }`}
+                }`}
                 id="userFirstName"
                 placeholder="Enter first name"
                 value={this.state.userFirstName}
-                onChange={e => this.onChange(e, "userFirstName")}
+                onChange={(e) => this.onChange(e, "userFirstName")}
                 disabled={loading ? "disabled" : ""}
               />
               {errors.userFirstName && (
@@ -62,11 +62,11 @@ class RegisterPage extends Component {
                 type="userLastName"
                 className={`form-control ${
                   errors.userLastName ? "is-invalid" : ""
-                  }`}
+                }`}
                 id="userLastlName"
                 placeholder="Enter last name"
                 value={this.state.userLastName}
-                onChange={e => this.onChange(e, "userLastName")}
+                onChange={(e) => this.onChange(e, "userLastName")}
                 disabled={loading ? "disabled" : ""}
               />
               {errors.userLastName && (
@@ -79,12 +79,12 @@ class RegisterPage extends Component {
                 type="email"
                 className={`form-control ${
                   errors.userEmail ? "is-invalid" : ""
-                  }`}
+                }`}
                 id="userEmail"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
                 value={this.state.userEmail}
-                onChange={e => this.onChange(e, "userEmail")}
+                onChange={(e) => this.onChange(e, "userEmail")}
                 disabled={loading ? "disabled" : ""}
               />
               {errors.userEmail && (
@@ -100,11 +100,11 @@ class RegisterPage extends Component {
                 type="password"
                 className={`form-control ${
                   errors.userPassword ? "is-invalid" : ""
-                  }`}
+                }`}
                 id="userPassword"
                 placeholder="Password"
                 value={this.state.userPassword}
-                onChange={e => this.onChange(e, "userPassword")}
+                onChange={(e) => this.onChange(e, "userPassword")}
                 disabled={loading ? "disabled" : ""}
               />
               {errors.userPassword && (
@@ -117,11 +117,11 @@ class RegisterPage extends Component {
                 type="password"
                 className={`form-control ${
                   errors.userPassword2 ? "is-invalid" : ""
-                  }`}
+                }`}
                 id="userPassword2"
                 placeholder="Confirm Password"
                 value={this.state.userPassword2}
-                onChange={e => this.onChange(e, "userPassword2")}
+                onChange={(e) => this.onChange(e, "userPassword2")}
                 disabled={loading ? "disabled" : ""}
               />
               {errors.userPassword2 && (
@@ -133,7 +133,7 @@ class RegisterPage extends Component {
                 type="submit"
                 className={`btn btn-primary actionbtn ${
                   loading ? " spinning" : ""
-                  }`}
+                }`}
                 disabled={loading ? "disabled" : ""}
               >
                 Register
@@ -148,14 +148,11 @@ class RegisterPage extends Component {
 
 const mapStateToProps = ({ service, loading }) => ({
   service,
-  loading
+  loading,
 });
 
 const actionCreators = {
-  register: usersActions.register
+  register: usersActions.register,
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators
-)(RegisterPage);
+export default connect(mapStateToProps, actionCreators)(RegisterPage);

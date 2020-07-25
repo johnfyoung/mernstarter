@@ -4,21 +4,21 @@ import { connect } from "react-redux";
 import { dbg } from "../../../utils";
 
 import { authActions } from "../../../redux/actions";
-import ConnectedPage from "../../connected/templates/ConnectedPage";
+import ConnectedPage from "../templates/ConnectedPage";
 
 class SignInPage extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
   };
 
-  handleOnChange = e => {
+  handleOnChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     dbg.log("SignInPage::handleSubmit event", e);
     e.preventDefault();
 
@@ -58,7 +58,7 @@ class SignInPage extends Component {
                   type="password"
                   className={`form-control ${
                     errors.password ? "is-invalid" : ""
-                    }`}
+                  }`}
                   id="password"
                   name="password"
                   placeholder="Password"
@@ -74,7 +74,7 @@ class SignInPage extends Component {
                 type="submit"
                 className={`btn btn-primary actionbtn ${
                   loading ? " spinning" : ""
-                  }`}
+                }`}
                 disabled={loading ? "disabled" : ""}
               >
                 {loading ? "Signing in..." : "Submit"}
@@ -89,14 +89,11 @@ class SignInPage extends Component {
 
 const mapStateToProps = ({ service, loading }) => ({
   service,
-  loading
+  loading,
 });
 
 const actionCreators = {
-  login: authActions.login
+  login: authActions.login,
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators
-)(SignInPage);
+export default connect(mapStateToProps, actionCreators)(SignInPage);

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import ConnectedPage from "../../connected/templates/ConnectedPage";
+import ConnectedPage from "../templates/ConnectedPage";
 
 function AdminPage(props) {
   return (
@@ -18,7 +18,7 @@ const mapStateToProps = ({ auth }) => ({
   permissions:
     auth.user && auth.user.groups
       ? auth.user.groups.reduce((accum, g) => accum.concat(g.permissions), [])
-      : []
+      : [],
 });
 
 export default connect(mapStateToProps)(AdminPage);

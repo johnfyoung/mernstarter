@@ -3,11 +3,15 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import jwt_decode from "jwt-decode";
 
-import { store, setRequestedWithHeader, getAuthCookieToken } from "./utils";
-import { authActions } from "./redux/actions";
+import {
+  store,
+  setRequestedWithHeader,
+  getAuthCookieToken,
+} from "./core/utils";
+import { authActions } from "./core/redux/actions";
 
-import "./resources/scss/main.scss";
-import App from "./components/App";
+import "./core/resources/scss/main.scss";
+import CoreApp from "./core/components/CoreApp";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -30,7 +34,7 @@ setRequestedWithHeader();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <CoreApp />
   </Provider>,
   document.getElementById("root")
 );

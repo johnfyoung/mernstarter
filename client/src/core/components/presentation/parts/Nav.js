@@ -28,7 +28,7 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           {menu &&
-            Object.keys(menu).map(key => {
+            Object.keys(menu).map((key) => {
               if (!menu[key].privilege || (menu[key].privilege && isAuthd)) {
                 return (
                   <li
@@ -40,8 +40,8 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
                       {menu[key].active ? (
                         <span className="sr-only">(current)</span>
                       ) : (
-                          ""
-                        )}
+                        ""
+                      )}
                     </Link>
                   </li>
                 );
@@ -69,7 +69,7 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
           <Fragment>
             {submenu ? (
               <ul className="navbar-nav ml-auto">
-                {Object.keys(submenu).map(key => {
+                {Object.keys(submenu).map((key) => {
                   return (
                     <li className="nav-item">
                       <Link className="nav-link" to={submenu[key].path}>
@@ -80,8 +80,8 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
                 })}
               </ul>
             ) : (
-                ""
-              )}
+              ""
+            )}
             {/* <li className='nav-item d-flex align-items-center'>
                 <span className='text-light'>{user.name}</span>
                 <img src={user.avatar} alt={`Avatar for ${user.name}`} className='rounded-circle mx-2' style={{ width: '35px' }} title='You must have a gravatar connected to your email to have an image' />
@@ -96,10 +96,10 @@ export default function Nav({ nav, isAuthd, handleSignOut }) {
             </button>
           </Fragment>
         ) : (
-            <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
-              Sign In
+          <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
+            Sign In
           </Link>
-          )}
+        )}
       </div>
     </nav>
   );

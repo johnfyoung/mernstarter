@@ -9,7 +9,7 @@ class TransitionRoute extends Component {
     if (isEmpty(path)) {
       return (
         <Route routePaths={routePaths}>
-          {routeProps => {
+          {(routeProps) => {
             if (!routePaths.includes(routeProps.location.pathname)) {
               return (
                 <CSSTransition
