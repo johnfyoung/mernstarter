@@ -1,0 +1,11 @@
+@import "../../../../app/resources/scss/colors.scss";
+
+.footer-bottom {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  background: $grey;
+}

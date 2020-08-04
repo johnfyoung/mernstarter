@@ -1,41 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import jwt_decode from "jwt-decode";
 
-import {
-  store,
-  setRequestedWithHeader,
-  getAuthCookieToken,
-} from "./core/utils";
-import { authActions } from "./core/redux/actions";
+import { Location } from "@reach/router";
 
-import "./core/resources/scss/main.scss";
-import CoreApp from "./core/components/CoreApp";
+import ServiceProvider from "./core/services/service.provider";
+
+import { NavProvider } from "./core/state";
+import { navConfig } from "./app/config";
+
+import { AuthProvider, useAuthContext } from "./core/state";
+import { AlertProvider } from "./core/state";
+
+import { setRequestedWithHeader } from "./core/utils";
+
+import App from "./app/App.js";
 
 import * as serviceWorker from "./serviceWorker";
-
-const token = getAuthCookieToken();
-if (token) {
-  const decoded = jwt_decode(token);
-
-  // check for expired token
-  const currentTime = Date.now() / 1000;
-
-  if (decoded.exp < currentTime) {
-    store.dispatch(authActions.logout());
-  } else {
-    // set user and isAuthenticated
-    store.dispatch(authActions.setCurrentUser(decoded));
-  }
-}
 
 setRequestedWithHeader();
 
 ReactDOM.render(
-  <Provider store={store}>
-    <CoreApp />
-  </Provider>,
+  <ServiceProvider>
+    <AlertProvider>
+      <AuthProvider>
+        <NavProvider value={navConfig}>
+          <Location>{({ location }) => <App location={location} />}</Location>
+        </NavProvider>
+      </AuthProvider>
+    </AlertProvider>
+  </ServiceProvider>,
   document.getElementById("root")
 );
 

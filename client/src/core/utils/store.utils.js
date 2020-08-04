@@ -1,7 +1,7 @@
-import { createStore } from "redux";
-import middleware from "../redux/middleware";
-import rootReducer from "../redux/reducers";
+// import { createStore } from "redux";
+// import middleware from "../redux/middleware";
+// import rootReducer from "../redux/reducers";
 
-const initialState = {};
+// const initialState = {};
 
-export const store = createStore(rootReducer, initialState, middleware);
+// export const store = createStore(rootReducer, initialState, middleware);

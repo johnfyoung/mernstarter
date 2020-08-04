@@ -10,6 +10,7 @@ const router = express.Router();
 require("dotenv").config();
 
 router.post("/authenticate", (req, res) => {
+  dbg("req body", req.body);
   const { errors, isValid } = validateLoginInput(req.body);
 
   // check validation
@@ -22,10 +23,10 @@ router.post("/authenticate", (req, res) => {
 
   // find user by email
   User.findOne({
-    email
+    email,
   })
     .populate("groups")
-    .then(async user => {
+    .then(async (user) => {
       // Check for user
       if (!user) {
         errors.email = "User not found";
@@ -39,12 +40,12 @@ router.post("/authenticate", (req, res) => {
           id: user.id,
           firstName: user.name,
           lastName: user.name,
-          groups: user.groups
+          groups: user.groups,
         };
 
         // Check to see if this user is already associated with the requestion device
         if (
-          !user.devices.some(d => {
+          !user.devices.some((d) => {
             return req.device._id.equals(d);
           })
         ) {
@@ -58,7 +59,7 @@ router.post("/authenticate", (req, res) => {
 
         // Sign the token
         const token = jwt.sign(payload, process.env.SECRETKEY, {
-          expiresIn: 3600
+          expiresIn: 3600,
         });
 
         // Setting the JWT in two cookies
@@ -68,16 +69,16 @@ router.post("/authenticate", (req, res) => {
 
         res.cookie(jwtCookies.HEADERPAYLOAD, tokenParts.join("."), {
           secure: process.env.COOKIE_SECURE === "false" ? false : true,
-          expires: new Date(Date.now() + 30 * 60000)
+          expires: new Date(Date.now() + 30 * 60000),
         });
         res.cookie(jwtCookies.SIGNATURE, tokenSignature, {
           secure: process.env.COOKIE_SECURE === "false" ? false : true,
-          httpOnly: true
+          httpOnly: true,
         });
 
         return res.json({
           success: true,
-          token: "Bearer " + token
+          token: "Bearer " + token,
         });
       } else {
         errors.password = "Password incorrect";
@@ -93,15 +94,15 @@ router.delete("/authenticate", (req, res) => {
   res.cookie(jwtCookies.HEADERPAYLOAD, "", {
     maxAge: 0,
     expires: Date.now(),
-    overwrite: true
+    overwrite: true,
   });
   res.cookie(jwtCookies.SIGNATURE, "", {
     maxAge: 0,
     expires: Date.now(),
-    overwrite: true
+    overwrite: true,
   });
   res.json({
-    success: true
+    success: true,
   });
 });
 
