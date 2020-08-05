@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { alertConstants } from "../constants/alert.constants";
-import { dbg } from "../../utils";
+import { dbg, useLocallyPersistedReducer } from "../../utils";
 
 const AlertContext = createContext();
 const { Provider } = AlertContext;
@@ -75,7 +75,11 @@ const reducer = (state, action) => {
 
 // 4. Create the Store
 const AlertProvider = ({ value = {}, ...props }) => {
-  const [state, dispatch] = useReducer(reducer, value);
+  const [state, dispatch] = useLocallyPersistedReducer(
+    reducer,
+    value,
+    "alertStore"
+  );
 
   return <Provider value={[state, dispatch]} {...props} />;
 };
