@@ -1,10 +1,13 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { alertConstants } from "../constants/alert.constants";
+import { dbg } from "../../utils";
 
 const AlertContext = createContext();
 const { Provider } = AlertContext;
 
 const reducer = (state, action) => {
+  dbg.log(`alert.reducer::${action.type}`, action);
+  dbg.log(`alert.reducer::state`, state);
   switch (action.type) {
     case alertConstants.SUCCESS:
       return {
@@ -49,10 +52,24 @@ const reducer = (state, action) => {
     case alertConstants.CLEARALERT:
       return {
         ...state,
+        alert: {
+          ...state.alert,
+          expired: true,
+        },
+      };
+    case alertConstants.HIDDEN:
+      return {
+        ...state,
         alert: null,
       };
+    case alertConstants.SHOWN:
+      return {
+        ...state,
+      };
     default:
-      return state;
+      return {
+        ...state,
+      };
   }
 };
 

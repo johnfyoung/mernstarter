@@ -1,21 +1,21 @@
 import React from "react";
 
-export default function Alert({ type, message, show, className }) {
+import "./style.scss";
+
+export default function Alert({ type, message, show, onDismiss }) {
   return (
-    <div
-      className={`alert ${type} alert-dismissible fade ${className} ${
-        show ? "show" : ""
-      }`}
-    >
+    <div className={`alert ${type} fade ${show ? "show" : ""}`}>
       {message}
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-label="Close"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
+      {onDismiss && (
+        <button
+          type="button"
+          className="close"
+          aria-label="Close"
+          onClick={onDismiss}
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      )}
     </div>
   );
 }
