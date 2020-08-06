@@ -52,7 +52,7 @@
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "uuid": "^3.3.3",
+    "uuid": "^3.4.0",
     "validator": "^11.1.0",
     "webpack": "4.42.0",
     "webpack-cli": "^3.3.12",

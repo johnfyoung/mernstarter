@@ -11,7 +11,7 @@ import {
   alertActions,
   authActions,
 } from "../core/state";
-import { getTokenPayload } from "../core/utils";
+import { getTokenPayload, dbg } from "../core/utils";
 
 import "../core/resources/scss/main.scss";
 
@@ -42,14 +42,6 @@ export default function App() {
 
     alertDispatch(alertActions.announce("Here is a default announcement"));
   }, []);
-
-  useEffect(() => {
-    if (alertState && alertState.alert) {
-      setTimeout(function() {
-        alertDispatch(alertActions.clearAlert());
-      }, 5000);
-    }
-  }, [alertState.alert]);
 
   return (
     <div>

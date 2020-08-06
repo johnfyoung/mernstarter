@@ -1,12 +1,10 @@
-import React from "react";
+import React, { Children } from "react";
 
-import "./style.scss";
-
-export default function Alert({ type, message, show, onDismiss }) {
+export default function Alert({ type, show, onDismiss, dimissable, children }) {
   return (
     <div className={`alert ${type} fade ${show ? "show" : ""}`}>
-      {message}
-      {onDismiss && (
+      {children}
+      {dimissable && (
         <button
           type="button"
           className="close"

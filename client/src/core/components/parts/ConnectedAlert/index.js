@@ -1,32 +1,35 @@
-import React from "react";
-import { CSSTransition } from "react-transition-group";
+import React, { useEffect } from "react";
 import { useAlertContext, alertActions } from "../../../state";
-import Alert from "../Alert";
+import AlertAnimated from "../AlertAnimated";
 
-export default function ConnectedAlert() {
+export default function ConnectedAlert({ timeOut, dismissable }) {
   const [alertState, alertDispatch] = useAlertContext();
 
+  useEffect(() => {
+    const t = timeOut || alertState.timeOut || false;
+    if (t) {
+      setTimeout(() => alertDispatch(alertActions.clearAlert()), t);
+    }
+  }, []);
+
   return (
-    <CSSTransition
-      in={
+    <AlertAnimated
+      isOn={
         alertState && alertState.alert && !alertState.alert.expired
           ? true
           : false
       }
-      classNames="alertTrans"
-      timeout={300}
-      unmountOnExit
+      type={alertState && alertState.alert && alertState.alert.type}
       onEnter={() => alertDispatch(alertActions.shown())}
       onExited={() => alertDispatch(alertActions.hidden())}
+      onDismiss={
+        dismissable ||
+        (alertState && alertState.alert && alertState.alert.dismissable)
+          ? () => alertDispatch(alertActions.clearAlert())
+          : null
+      }
     >
-      <Alert
-        type={alertState && alertState.alert && alertState.alert.type}
-        message={
-          (alertState && alertState.alert && alertState.alert.message) || ""
-        }
-        show={true}
-        onDismiss={() => alertDispatch(alertActions.clearAlert())}
-      />
-    </CSSTransition>
+      {(alertState && alertState.alert && alertState.alert.message) || ""}
+    </AlertAnimated>
   );
 }

@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { alertConstants } from "../constants/alert.constants";
 import { dbg, useLocallyPersistedReducer } from "../../utils";
+import { v4 as uuidv4 } from "uuid";
 
 const AlertContext = createContext();
 const { Provider } = AlertContext;
@@ -8,73 +9,65 @@ const { Provider } = AlertContext;
 const reducer = (state, action) => {
   dbg.log(`alert.reducer::${action.type}`, action);
   dbg.log(`alert.reducer::state`, state);
+
+  const createAlert = (type) => ({
+    type: `alert-${type}`,
+    id: uuidv4(),
+    message: action.payload.message,
+    dismissable: action.payload.dismissable || true,
+    timeOut: action.payload.timeOut || false,
+  });
   switch (action.type) {
     case alertConstants.SUCCESS:
       return {
         ...state,
-        alert: {
-          type: "alert-success",
-          message: action.payload,
-        },
+        alerts: [...state.alerts, createAlert("success")],
       };
     case alertConstants.ERROR:
       return {
         ...state,
-        alert: {
-          type: "alert-danger",
-          message: action.payload,
-        },
+        alerts: [...state.alerts, createAlert("danger")],
       };
     case alertConstants.WARN:
       return {
         ...state,
-        alert: {
-          type: "alert-warning",
-          message: action.payload,
-        },
+        alerts: [...state.alerts, createAlert("warning")],
       };
     case alertConstants.INFO:
       return {
         ...state,
-        alert: {
-          type: "alert-info",
-          message: action.payload,
-        },
+        alerts: [...state.alerts, createAlert("info")],
       };
     case alertConstants.ANNOUNCE:
       return {
         ...state,
         announcement: {
           type: "alert-info",
-          message: action.payload,
+          message: action.payload.message,
+          dismissable: action.payload.dismissable || true,
         },
       };
     case alertConstants.CLEARALERT:
       return {
         ...state,
-        alert: {
-          ...state.alert,
-          expired: true,
-        },
+        alerts: state.alerts.map((alert) =>
+          alert.id === action.payload ? { ...alert, expired: true } : alert
+        ),
       };
     case alertConstants.HIDDEN:
       return {
         ...state,
-        alert: null,
+        alerts: state.alerts.filter((alert) => alert.id !== action.payload),
       };
     case alertConstants.SHOWN:
-      return {
-        ...state,
-      };
+      return state;
     default:
-      return {
-        ...state,
-      };
+      return state;
   }
 };
 
 // 4. Create the Store
-const AlertProvider = ({ value = {}, ...props }) => {
+const AlertProvider = ({ value = { alerts: [] }, ...props }) => {
   const [state, dispatch] = useLocallyPersistedReducer(
     reducer,
     value,

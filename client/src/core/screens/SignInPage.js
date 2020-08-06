@@ -38,7 +38,7 @@ export default function SignInPage() {
       dbg.log(loginResult.data);
 
       authDispatch(authActions.loginSuccess(getTokenPayload()));
-      alertDispatch(alertActions.success("Login successful"));
+      alertDispatch(alertActions.success("Login successful", true, 6000));
     }
   }, [loginResult]);
 

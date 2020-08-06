@@ -1,28 +1,43 @@
 import { alertConstants } from "../constants/alert.constants";
 
 export const alertActions = {
-  success: (payload) => {
-    return { type: alertConstants.SUCCESS, payload };
+  success: (message, timeOut, isDismissable) => {
+    return {
+      type: alertConstants.SUCCESS,
+      payload: { message, timeOut, isDismissable },
+    };
   },
-  error: (payload) => {
-    return { type: alertConstants.ERROR, payload };
+  error: (message, timeOut, isDismissable) => {
+    return {
+      type: alertConstants.ERROR,
+      payload: { message, timeOut, isDismissable },
+    };
   },
-  warn: (payload) => {
-    return { type: alertConstants.WARN, payload };
+  warn: (message, timeOut, isDismissable) => {
+    return {
+      type: alertConstants.WARN,
+      payload: { message, timeOut, isDismissable },
+    };
   },
-  info: (payload) => {
-    return { type: alertConstants.INFO, payload };
+  info: (message, timeOut, isDismissable) => {
+    return {
+      type: alertConstants.INFO,
+      payload: { message, timeOut, isDismissable },
+    };
   },
-  announce: (payload) => {
-    return { type: alertConstants.ANNOUNCE, payload };
+  announce: (message, isDismissable) => {
+    return {
+      type: alertConstants.ANNOUNCE,
+      payload: { message, isDismissable },
+    };
   },
-  shown: (payload) => {
-    return { type: alertConstants.SHOWN, payload };
+  shown: (index) => {
+    return { type: alertConstants.SHOWN, payload: index };
   },
-  hidden: (payload) => {
-    return { type: alertConstants.HIDDEN, payload };
+  hidden: (index) => {
+    return { type: alertConstants.HIDDEN, payload: index };
   },
-  clearAlert: () => {
-    return { type: alertConstants.CLEARALERT };
+  clearAlert: (index) => {
+    return { type: alertConstants.CLEARALERT, payload: index };
   },
 };
