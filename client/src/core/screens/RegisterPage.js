@@ -20,7 +20,7 @@ export default function RegisterPage() {
   const alertDispatch = useAlertContext()[1];
 
   const [regResult, register] = useRegistrationService();
-  const { isLoading, errors } = regResult;
+  const { isLoading, error: errors } = regResult;
 
   useEffect(() => {
     if (submitted) {
@@ -31,12 +31,24 @@ export default function RegisterPage() {
   }, [submitted]);
 
   useEffect(() => {
-    if (regResult && regResult.data) {
-      dbg.log("RegisterPage::regResult", regResult.data);
-      navigate("/signin");
-      alertDispatch(
-        alertActions.success("Registration successful!", true, 6000)
-      );
+    if (regResult) {
+      regResult && dbg.log("reg result", regResult);
+      if (regResult.data) {
+        dbg.log("RegisterPage::regResult", regResult.data);
+        navigate("/signin");
+        alertDispatch(
+          alertActions.success("Registration successful!", true, 6000)
+        );
+      }
+
+      if (regResult.error) {
+        dbg.log("reg result got error");
+        let message = "Please correct the errors";
+        if (typeof regResult.error.data === "string") {
+          message = regResult.error.data;
+        }
+        alertDispatch(alertActions.error(message, true, 6000));
+      }
     }
   }, [regResult]);
 

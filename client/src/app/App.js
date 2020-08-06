@@ -17,6 +17,7 @@ import { getSession, dbg } from "../core/utils";
 import "../core/resources/scss/main.scss";
 
 import PrivateRoute from "../core/components/special/PrivateRoute";
+import PublicRoute from "../core/components/special/PublicRoute";
 
 import HomePage from "../core/screens/HomePage";
 import SignInPage from "../core/screens/SignInPage";
@@ -59,9 +60,21 @@ export default function App() {
         />
       </Header>
       <FadeTransitionRouter>
-        <HomePage exact path="/" />
-        <SignInPage exact path="/signin" />
-        <RegisterPage exact path="/register" />
+        <PublicRoute exact path="/" component={HomePage} />
+        <PublicRoute
+          exact
+          path="/signin"
+          component={SignInPage}
+          restricted={true}
+          authenticated={authState.authenticated}
+        />
+        <PublicRoute
+          exact
+          path="/register"
+          restricted={true}
+          authenticated={authState.authenticated}
+          component={RegisterPage}
+        />
         <PrivateRoute
           exact
           path="/admin"
