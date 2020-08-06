@@ -1,4 +1,5 @@
 import { authConstants } from "../constants/auth.constants";
+import { deleteCookie } from "../../utils";
 
 export const authActions = {
   loginSuccess: (user) => ({
@@ -9,7 +10,10 @@ export const authActions = {
     type: authConstants.SET_CURRENT_USER,
     payload: user,
   }),
-  logout: () => ({
-    type: authConstants.LOGOUT,
-  }),
+  logout: () => {
+    deleteCookie(authConstants.AUTH_COOKIE_HEADERPAYLOAD);
+    return {
+      type: authConstants.LOGOUT,
+    };
+  },
 };

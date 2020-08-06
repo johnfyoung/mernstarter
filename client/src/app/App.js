@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import Footer from "../core/components/parts/CoreFooter";
 import Header from "../core/components/parts/CoreHeader";
 import Nav from "../core/components/parts/CoreNav";
@@ -11,14 +12,18 @@ import {
   alertActions,
   authActions,
 } from "../core/state";
-import { getTokenPayload, dbg } from "../core/utils";
+import { getSession, dbg } from "../core/utils";
 
 import "../core/resources/scss/main.scss";
 
+import PrivateRoute from "../core/components/special/PrivateRoute";
+
 import HomePage from "../core/screens/HomePage";
 import SignInPage from "../core/screens/SignInPage";
+import AdminPage from "../core/screens/AdminPage";
+import ProfilePage from "../core/screens/ProfilePage";
 // import InstallPage from "../core/screens/InstallPage";
-// import RegisterPage from "../core/screens/RegisterPage";
+import RegisterPage from "../core/screens/RegisterPage";
 import NotFoundPage from "../core/screens/NotFound";
 
 export default function App() {
@@ -27,18 +32,14 @@ export default function App() {
   const [authState, authDispatch] = useAuthContext({});
 
   useEffect(() => {
-    function checkForValidSession() {
-      const payload = getTokenPayload();
-      // check for expired token
-      const currentTime = Date.now() / 1000;
-      if (payload && payload.exp > currentTime) {
-        authDispatch(authActions.setUser(payload));
-      } else {
-        authDispatch(authActions.logout());
-      }
+    const session = getSession();
+    if (session) {
+      authDispatch(authActions.setUser(session));
+    } else {
+      authDispatch(authActions.logout());
     }
 
-    checkForValidSession();
+    document.title = process.env.REACT_APP_NAME;
 
     alertDispatch(alertActions.announce("Here is a default announcement"));
   }, []);
@@ -53,16 +54,28 @@ export default function App() {
       <Header>
         <Nav
           nav={navState}
-          isAuthd={authState.authenticated}
+          authenticated={authState.authenticated}
           handleSignOut={() => authDispatch(authActions.logout())}
         />
       </Header>
       <FadeTransitionRouter>
         <HomePage exact path="/" />
         <SignInPage exact path="/signin" />
-        {/* <RegisterPage exact path="/register" />
-        <InstallPage exact path="/install" /> */}
-        {/* <PrivateRoutes /> */}
+        <RegisterPage exact path="/register" />
+        <PrivateRoute
+          exact
+          path="/admin"
+          component={AdminPage}
+          authenticated={authState.authenticated}
+        />
+        <PrivateRoute
+          exact
+          path="/profile"
+          component={ProfilePage}
+          authenticated={authState.authenticated}
+        />
+        {/*<InstallPage exact path="/install" />*/}
+
         <NotFoundPage default />
       </FadeTransitionRouter>
       <Footer />

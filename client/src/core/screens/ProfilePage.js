@@ -1,7 +1,9 @@
 import React from "react";
 import ConnectedPage from "../components/layout/ConnectedPage";
+import { getPermissions } from "../utils";
 
 export default function ProfilePage(props) {
+  const permissions = getPermissions();
   return (
     <ConnectedPage pageClass="page-admin">
       <div className="row">
@@ -10,7 +12,7 @@ export default function ProfilePage(props) {
             <div className="card-header">Your permissions</div>
             <div className="card-body">
               <ul>
-                {props.permissions.map((p) => (
+                {permissions.map((p) => (
                   <li key={p}>{p}</li>
                 ))}
               </ul>

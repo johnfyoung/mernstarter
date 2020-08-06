@@ -9,3 +9,11 @@ export function useLoginService() {
     withCredentials: true,
   }));
 }
+
+export function useRegistrationService() {
+  return useResource((data) => ({
+    method: "post",
+    url: "/api/users/register",
+    data,
+  }));
+}

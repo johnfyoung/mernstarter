@@ -9,6 +9,16 @@ export const getCookie = (name) => {
   return v ? v[2] : null;
 };
 
+export const setCookie = (name, value, days) => {
+  var d = new Date();
+  d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+  document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+};
+
+export const deleteCookie = (name) => {
+  setCookie(name, "", -1);
+};
+
 export const setAuthToken = (token) => {
   if (token) {
     // Apply to every request
@@ -37,6 +47,22 @@ export const getTokenPayload = () => {
   }
 
   return null;
+};
+
+export const getSession = () => {
+  const payload = getTokenPayload();
+  // check for expired token
+  const currentTime = Date.now() / 1000;
+  if (payload && payload.exp > currentTime) {
+    return payload;
+  }
+
+  return null;
+};
+
+export const getPermissions = () => {
+  const session = getSession();
+  return session.groups.reduce((accum, g) => accum.concat(g.permissions), []);
 };
 
 /**

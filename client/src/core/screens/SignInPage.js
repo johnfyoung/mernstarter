@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { navigate } from "@reach/router";
+import { navigate, Link } from "@reach/router";
 import {
   useAuthContext,
   authActions,
@@ -60,10 +60,12 @@ export default function SignInPage() {
 
   return (
     <ConnectedPage pageClass="page-signin">
-      {error && dbg.log(error)}
       <div className="d-flex row justify-content-center">
         <div className="col-md-8 page-signin-form">
-          <h1>Sign in for access:</h1>
+          <div className="mb-5">
+            <h1>Welcome back!</h1>
+            <strong className="text-secondary">Sign in for access</strong>
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Email address</label>
@@ -116,6 +118,9 @@ export default function SignInPage() {
               {isLoading ? "Signing in..." : "Submit"}
             </button>
           </form>
+          <div className="mt-3">
+            Don't have an account? <Link to="/register">Register here.</Link>
+          </div>
         </div>
       </div>
     </ConnectedPage>

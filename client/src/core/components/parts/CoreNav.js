@@ -2,9 +2,9 @@ import React, { Fragment } from "react";
 import { Link } from "@reach/router";
 import { dbg } from "../../utils";
 
-export default function CoreNav({ nav, isAuthd, handleSignOut }) {
+export default function CoreNav({ nav, authenticated, handleSignOut }) {
   const { brand, menu, submenu, hasSearch } = nav;
-  dbg.log("Nav:: isAuthd", isAuthd);
+  dbg.log("Nav:: authenticated", authenticated);
   dbg.log("Nav:: Menu", menu);
   //dbg.log("Props", props);
   return (
@@ -30,7 +30,10 @@ export default function CoreNav({ nav, isAuthd, handleSignOut }) {
         <ul className="navbar-nav mr-auto">
           {menu &&
             Object.keys(menu).map((key) => {
-              if (!menu[key].privilege || (menu[key].privilege && isAuthd)) {
+              if (
+                !menu[key].privilege ||
+                (menu[key].privilege && authenticated)
+              ) {
                 return (
                   <li
                     key={key}
@@ -66,7 +69,7 @@ export default function CoreNav({ nav, isAuthd, handleSignOut }) {
             </button>
           </form>
         )}
-        {isAuthd ? (
+        {authenticated ? (
           <Fragment>
             {submenu ? (
               <ul className="navbar-nav ml-auto">

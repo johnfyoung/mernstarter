@@ -1,13 +1,23 @@
-import React, { Fragment } from "react";
-import { useAuthContext } from "../../state";
+import React, { Fragment, useEffect, useState } from "react";
+import { navigate } from "@reach/router";
 
-export default function PrivateRoute(props) {
-  const [authState, authDispatch] = useAuthContext();
-  let { as: Comp, ...props } = props;
+import { alertActions, useAlertContext } from "../../state";
 
-  return (
-    <Fragment>
-      {authState.authenticated ? <Comp {...props} /> : <Login />}
-    </Fragment>
-  );
-}
+const PrivateRoute = ({ component: Component, authenticated, ...rest }) => {
+  const alertDispatch = useAlertContext()[1];
+  const [alertedState, setAlertedState] = useState(false);
+
+  useEffect(() => {
+    if (!authenticated && !alertedState) {
+      alertDispatch(
+        alertActions.error("Please sign in for access", true, 6000)
+      );
+      setAlertedState(true);
+      navigate("/signin");
+    }
+  });
+
+  return <Fragment>{authenticated && <Component {...rest} />}</Fragment>;
+};
+
+export default PrivateRoute;

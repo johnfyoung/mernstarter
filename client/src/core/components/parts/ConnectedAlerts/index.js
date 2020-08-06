@@ -12,7 +12,6 @@ export default function ConnectedAlerts() {
   //   }
   // }, []);
 
-  console.log("Alerts", alertState.alerts);
   return (
     <div>
       {alertState.alerts &&

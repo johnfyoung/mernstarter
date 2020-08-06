@@ -1,158 +1,186 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { alertActions, useAlertContext } from "../state";
+import { useRegistrationService } from "../services/auth.services";
+import { Link, navigate } from "@reach/router";
 
-import { dbg } from "../../../utils";
 import ConnectedPage from "../components/layout/ConnectedPage";
-import { usersActions } from "../../../redux/actions";
+import { dbg } from "../utils";
 
-class RegisterPage extends Component {
-  state = {
+export default function RegisterPage() {
+  const [formState, setFormState] = useState({
     userFirstName: "",
     userLastName: "",
     userEmail: "",
     userPassword: "",
     userPassword2: "",
-  };
+  });
 
-  onSubmit = (e) => {
-    e.preventDefault();
+  const [submitted, setSubmitted] = useState(false);
 
-    this.props.register(this.state);
+  const alertDispatch = useAlertContext()[1];
 
-    dbg.log("RegisterPage::submit props", this.props);
-  };
+  const [regResult, register] = useRegistrationService();
+  const { isLoading, errors } = regResult;
 
-  onChange = (e, field) => {
-    this.setState({
-      [field]: e.target.value,
+  useEffect(() => {
+    if (submitted) {
+      dbg.log("formState", formState);
+      register(formState);
+      setSubmitted(false);
+    }
+  }, [submitted]);
+
+  useEffect(() => {
+    if (regResult && regResult.data) {
+      dbg.log("RegisterPage::regResult", regResult.data);
+      navigate("/signin");
+      alertDispatch(
+        alertActions.success("Registration successful!", true, 6000)
+      );
+    }
+  }, [regResult]);
+
+  const handleOnChange = (e) => {
+    setFormState({
+      ...formState,
+      [e.target.name]: e.target.value,
     });
   };
-  render() {
-    const { service, loading } = this.props;
-    const errors = service.error ? service.error : {};
-    return (
-      <ConnectedPage>
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <ConnectedPage>
+      <div className="row">
+        <div className="col-12">
+          <h1>Register for an account</h1>
+        </div>
+      </div>
+      <form noValidate onSubmit={handleSubmit}>
         <div className="row">
-          <div className="col-12">
-            <h1>Register for an account</h1>
+          <div className="form-group col-md-6">
+            <label htmlFor="userFirstName">First name</label>
+            <input
+              type="userFirstName"
+              name="userFirstName"
+              className={`form-control ${
+                errors && errors.data.userFirstName ? "is-invalid" : ""
+              }`}
+              id="userFirstName"
+              placeholder="Enter first name"
+              value={formState.userFirstName}
+              onChange={handleOnChange}
+              disabled={isLoading ? "disabled" : ""}
+            />
+            {errors && errors.data.userFirstName && (
+              <div className="invalid-feedback">
+                {errors && errors.data.userFirstName}
+              </div>
+            )}
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="userLastName">Last name</label>
+            <input
+              type="userLastName"
+              name="userLastName"
+              className={`form-control ${
+                errors && errors.data.userLastName ? "is-invalid" : ""
+              }`}
+              id="userLastlName"
+              placeholder="Enter last name"
+              value={formState.userLastName}
+              onChange={handleOnChange}
+              disabled={isLoading ? "disabled" : ""}
+            />
+            {errors && errors.data.userLastName && (
+              <div className="invalid-feedback">
+                {errors && errors.data.userLastName}
+              </div>
+            )}
+          </div>
+          <div className="form-group col-12">
+            <label htmlFor="userEmail">Email address</label>
+            <input
+              type="email"
+              name="userEmail"
+              className={`form-control ${
+                errors && errors.data.userEmail ? "is-invalid" : ""
+              }`}
+              id="userEmail"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+              value={formState.userEmail}
+              onChange={handleOnChange}
+              disabled={isLoading ? "disabled" : ""}
+            />
+            {errors && errors.data.userEmail && (
+              <div className="invalid-feedback">
+                {errors && errors.data.userEmail}
+              </div>
+            )}
+            <small id="emailHelp" className="form-text text-muted">
+              We'll never share your email with anyone else.
+            </small>
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="userPassword">Password</label>
+            <input
+              type="password"
+              name="userPassword"
+              className={`form-control ${
+                errors && errors.data.userPassword ? "is-invalid" : ""
+              }`}
+              id="userPassword"
+              placeholder="Password"
+              value={formState.userPassword}
+              onChange={handleOnChange}
+              disabled={isLoading ? "disabled" : ""}
+            />
+            {errors && errors.data.userPassword && (
+              <div className="invalid-feedback">
+                {errors && errors.data.userPassword}
+              </div>
+            )}
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="userPassword2">Confirm Password</label>
+            <input
+              type="password"
+              name="userPassword2"
+              className={`form-control ${
+                errors && errors.data.userPassword2 ? "is-invalid" : ""
+              }`}
+              id="userPassword2"
+              placeholder="Confirm Password"
+              value={formState.userPassword2}
+              onChange={handleOnChange}
+              disabled={isLoading ? "disabled" : ""}
+            />
+            {errors && errors.data.userPassword2 && (
+              <div className="invalid-feedback">
+                {errors && errors.data.userPassword2}
+              </div>
+            )}
+          </div>
+          <div className="form-group col-12">
+            <button
+              type="submit"
+              className={`btn btn-primary actionbtn ${
+                isLoading ? " spinning" : ""
+              }`}
+              disabled={isLoading ? "disabled" : ""}
+            >
+              Register
+            </button>
           </div>
         </div>
-        <form noValidate onSubmit={this.onSubmit}>
-          <div className="row">
-            <div className="form-group col-md-6">
-              <label htmlFor="userFirstName">First name</label>
-              <input
-                type="userFirstName"
-                className={`form-control ${
-                  errors.userFirstName ? "is-invalid" : ""
-                }`}
-                id="userFirstName"
-                placeholder="Enter first name"
-                value={this.state.userFirstName}
-                onChange={(e) => this.onChange(e, "userFirstName")}
-                disabled={loading ? "disabled" : ""}
-              />
-              {errors.userFirstName && (
-                <div className="invalid-feedback">{errors.userFirstName}</div>
-              )}
-            </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="userLastName">Last name</label>
-              <input
-                type="userLastName"
-                className={`form-control ${
-                  errors.userLastName ? "is-invalid" : ""
-                }`}
-                id="userLastlName"
-                placeholder="Enter last name"
-                value={this.state.userLastName}
-                onChange={(e) => this.onChange(e, "userLastName")}
-                disabled={loading ? "disabled" : ""}
-              />
-              {errors.userLastName && (
-                <div className="invalid-feedback">{errors.userLastName}</div>
-              )}
-            </div>
-            <div className="form-group col-12">
-              <label htmlFor="userEmail">Email address</label>
-              <input
-                type="email"
-                className={`form-control ${
-                  errors.userEmail ? "is-invalid" : ""
-                }`}
-                id="userEmail"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-                value={this.state.userEmail}
-                onChange={(e) => this.onChange(e, "userEmail")}
-                disabled={loading ? "disabled" : ""}
-              />
-              {errors.userEmail && (
-                <div className="invalid-feedback">{errors.userEmail}</div>
-              )}
-              <small id="emailHelp" className="form-text text-muted">
-                We'll never share your email with anyone else.
-              </small>
-            </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="userPassword">Password</label>
-              <input
-                type="password"
-                className={`form-control ${
-                  errors.userPassword ? "is-invalid" : ""
-                }`}
-                id="userPassword"
-                placeholder="Password"
-                value={this.state.userPassword}
-                onChange={(e) => this.onChange(e, "userPassword")}
-                disabled={loading ? "disabled" : ""}
-              />
-              {errors.userPassword && (
-                <div className="invalid-feedback">{errors.userPassword}</div>
-              )}
-            </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="userPassword2">Confirm Password</label>
-              <input
-                type="password"
-                className={`form-control ${
-                  errors.userPassword2 ? "is-invalid" : ""
-                }`}
-                id="userPassword2"
-                placeholder="Confirm Password"
-                value={this.state.userPassword2}
-                onChange={(e) => this.onChange(e, "userPassword2")}
-                disabled={loading ? "disabled" : ""}
-              />
-              {errors.userPassword2 && (
-                <div className="invalid-feedback">{errors.userPassword2}</div>
-              )}
-            </div>
-            <div className="form-group col-12">
-              <button
-                type="submit"
-                className={`btn btn-primary actionbtn ${
-                  loading ? " spinning" : ""
-                }`}
-                disabled={loading ? "disabled" : ""}
-              >
-                Register
-              </button>
-            </div>
-          </div>
-        </form>
-      </ConnectedPage>
-    );
-  }
+      </form>
+      <div className="mt-3">
+        Already have an account? <Link to="/signin">Sign in here.</Link>
+      </div>
+    </ConnectedPage>
+  );
 }
-
-const mapStateToProps = ({ service, loading }) => ({
-  service,
-  loading,
-});
-
-const actionCreators = {
-  register: usersActions.register,
-};
-
-export default connect(mapStateToProps, actionCreators)(RegisterPage);
