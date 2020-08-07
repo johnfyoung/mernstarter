@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { globalHistory } from "@reach/router";
+import React, { useEffect, useState } from "react";
+import { globalHistory, navigate } from "@reach/router";
 
 import {
   CoreFooter as Footer,
@@ -38,12 +38,12 @@ export default function App() {
   const [authState, authDispatch] = useAuthContext({});
 
   useEffect(() => {
-    const session = getSession();
-    if (session) {
-      authDispatch(authActions.setUser(session));
-    } else {
-      authDispatch(authActions.logout());
-    }
+    // const session = getSession();
+    // if (session) {
+    //   authDispatch(authActions.setUser(session));
+    // } else {
+    //   authDispatch(authActions.logout());
+    // }
 
     document.title = process.env.REACT_APP_NAME;
 
@@ -56,6 +56,15 @@ export default function App() {
     });
   });
 
+  function handleSignOut() {
+    authDispatch(authActions.signingOut());
+    navigate("/");
+    authDispatch(authActions.logout());
+    alertDispatch(
+      alertActions.success("You have successfully signed out", true, 5000)
+    );
+  }
+
   return (
     <div>
       {alertState.announcement && (
@@ -67,7 +76,7 @@ export default function App() {
         <Nav
           nav={navState}
           authenticated={authState.authenticated}
-          handleSignOut={() => authDispatch(authActions.logout())}
+          handleSignOut={handleSignOut}
         />
       </Header>
       <AlertContainer />
@@ -76,22 +85,22 @@ export default function App() {
         <PublicRoute
           exact
           path="/signin"
-          component={SignInPage}
           restricted={true}
-          authenticated={authState.authenticated}
+          component={SignInPage}
+          auth={authState}
         />
         <PublicRoute
           exact
           path="/register"
           restricted={true}
-          authenticated={authState.authenticated}
+          auth={authState}
           component={RegisterPage}
         />
         <PublicRoute
           exact
           path="/install"
           restricted={true}
-          authenticated={authState.authenticated}
+          auth={authState}
           appName={process.env.REACT_APP_NAME}
           component={InstallPage}
         />
@@ -99,13 +108,13 @@ export default function App() {
           exact
           path="/admin"
           component={AdminPage}
-          authenticated={authState.authenticated}
+          auth={authState}
         />
         <PrivateRoute
           exact
           path="/profile"
           component={ProfilePage}
-          authenticated={authState.authenticated}
+          auth={authState}
         />
         {/*<InstallPage exact path="/install" />*/}
 

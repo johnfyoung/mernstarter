@@ -5,13 +5,16 @@ import { Location } from "@reach/router";
 
 import ServiceProvider from "./core/services/service.provider";
 
-import { NavProvider } from "./core/state";
 import { navConfig } from "./app/config";
 
-import { AuthProvider, useAuthContext } from "./core/state";
-import { AlertProvider } from "./core/state";
+import {
+  AuthProvider,
+  AlertProvider,
+  NavProvider,
+  setAuthentication,
+} from "./core/state";
 
-import { setRequestedWithHeader } from "./core/utils";
+import { setRequestedWithHeader, getSession } from "./core/utils";
 
 import App from "./app/App.js";
 
@@ -22,7 +25,7 @@ setRequestedWithHeader();
 ReactDOM.render(
   <ServiceProvider>
     <AlertProvider>
-      <AuthProvider>
+      <AuthProvider value={setAuthentication(getSession())}>
         <NavProvider value={navConfig}>
           <Location>{({ location }) => <App location={location} />}</Location>
         </NavProvider>

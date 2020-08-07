@@ -6,6 +6,15 @@ export const authActions = {
     type: authConstants.LOGIN_SUCCESS,
     payload: user,
   }),
+  signingIn: () => ({
+    type: authConstants.LOGIN_REQUEST,
+  }),
+  complete: () => ({
+    type: authConstants.LOGIN_COMPLETE,
+  }),
+  signingOut: () => ({
+    type: authConstants.LOGOUT_REQUEST,
+  }),
   setUser: (user) => ({
     type: authConstants.SET_CURRENT_USER,
     payload: user,

@@ -28,6 +28,7 @@ export default function SignInPage() {
   useEffect(() => {
     if (formState.isSubmitted) {
       dbg.log("formState", formState);
+      authDispatch(authActions.signingIn());
       login(formState.email, formState.password);
       setFormState({ ...formState, isSubmitted: false });
     }
@@ -39,12 +40,9 @@ export default function SignInPage() {
 
       authDispatch(authActions.loginSuccess(getTokenPayload()));
       alertDispatch(alertActions.success("Login successful", true, 6000));
+      navigate("/admin");
     }
   }, [loginResult]);
-
-  if (authState.authenticated) {
-    navigate("/");
-  }
 
   const handleOnChange = (e) => {
     setFormState({
