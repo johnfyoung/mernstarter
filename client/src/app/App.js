@@ -28,7 +28,7 @@ import HomePage from "../core/screens/HomePage";
 import SignInPage from "../core/screens/SignInPage";
 import AdminPage from "../core/screens/AdminPage";
 import ProfilePage from "../core/screens/ProfilePage";
-// import InstallPage from "../core/screens/InstallPage";
+import InstallPage from "../core/screens/InstallPage";
 import RegisterPage from "../core/screens/RegisterPage";
 import NotFoundPage from "../core/screens/NotFound";
 
@@ -86,6 +86,14 @@ export default function App() {
           restricted={true}
           authenticated={authState.authenticated}
           component={RegisterPage}
+        />
+        <PublicRoute
+          exact
+          path="/install"
+          restricted={true}
+          authenticated={authState.authenticated}
+          appName={process.env.REACT_APP_NAME}
+          component={InstallPage}
         />
         <PrivateRoute
           exact

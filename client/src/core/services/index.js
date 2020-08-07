@@ -1,5 +1,4 @@
-export * from "./auth";
-export * from "./install";
-export * from "./users";
-export * from "./log";
-export * from "./geoloc";
+export * from "./auth.services";
+export * from "./install.services";
+// export * from "./log";
+// export * from "./geoloc";

@@ -1,7 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { authConstants } from "../state";
-import { authServices } from "../services";
 import { dbg } from "./log.utils";
 
 export const getCookie = (name) => {
@@ -69,18 +68,18 @@ export const getPermissions = () => {
  * TODO: in development
  * @param {*} resource
  */
-export const checkPrivileges = async (resource) => {
-  dbg.log("checkPrivileges::");
-  const user = localStorage.getItem("user");
-  if (user) {
-    dbg.log("checkPrivileges:: got a user");
-    const result = await authServices.isAuthorized(resource, user.token);
-    return result;
-  }
+// export const checkPrivileges = async (resource) => {
+//   dbg.log("checkPrivileges::");
+//   const user = localStorage.getItem("user");
+//   if (user) {
+//     dbg.log("checkPrivileges:: got a user");
+//     const result = await authServices.isAuthorized(resource, user.token);
+//     return result;
+//   }
 
-  dbg.log("checkPrivileges:: no user");
-  return false;
-};
+//   dbg.log("checkPrivileges:: no user");
+//   return false;
+// };
 
 export const setCSRFInterceptor = () => {
   // Apply to every request
