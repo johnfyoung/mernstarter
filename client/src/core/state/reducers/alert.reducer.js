@@ -10,33 +10,33 @@ const reducer = (state, action) => {
   dbg.log(`alert.reducer::${action.type}`, action);
   dbg.log(`alert.reducer::state`, state);
 
-  const createAlert = (type) => ({
+  const createAlert = (type, payload) => ({
     type: `alert-${type}`,
     id: uuidv4(),
-    message: action.payload.message,
-    dismissable: action.payload.dismissable || true,
-    timeOut: action.payload.timeOut || false,
+    message: payload.message,
+    dismissable: payload.dismissable || true,
+    timeOut: payload.timeOut || false,
   });
   switch (action.type) {
     case alertConstants.SUCCESS:
       return {
         ...state,
-        alerts: [...state.alerts, createAlert("success")],
+        alerts: [...state.alerts, createAlert("success", action.payload)],
       };
     case alertConstants.ERROR:
       return {
         ...state,
-        alerts: [...state.alerts, createAlert("danger")],
+        alerts: [...state.alerts, createAlert("danger", action.payload)],
       };
     case alertConstants.WARN:
       return {
         ...state,
-        alerts: [...state.alerts, createAlert("warning")],
+        alerts: [...state.alerts, createAlert("warning", action.payload)],
       };
     case alertConstants.INFO:
       return {
         ...state,
-        alerts: [...state.alerts, createAlert("info")],
+        alerts: [...state.alerts, createAlert("info", action.payload)],
       };
     case alertConstants.ANNOUNCE:
       return {
@@ -52,6 +52,13 @@ const reducer = (state, action) => {
         ...state,
         alerts: state.alerts.map((alert) =>
           alert.id === action.payload ? { ...alert, expired: true } : alert
+        ),
+      };
+    case alertConstants.CLEARALERTS:
+      return {
+        ...state,
+        alerts: state.alerts.map((alert) =>
+          !alert.timeOut ? { ...alert, expired: true } : alert
         ),
       };
     case alertConstants.HIDDEN:

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useAlertContext, alertActions } from "../../../state";
 import AlertAnimated from "../AlertAnimated";
+import { dbg } from "../../../utils";
 
 export default function ConnectedAlerts() {
   const [alertState, alertDispatch] = useAlertContext();
@@ -14,6 +15,7 @@ export default function ConnectedAlerts() {
 
   return (
     <div>
+      {dbg.log("ConnectedAlerts::rendering...")}
       {alertState.alerts &&
         alertState.alerts.map((alert) => (
           <AlertAnimated

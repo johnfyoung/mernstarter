@@ -1,25 +1,25 @@
 import { alertConstants } from "../constants/alert.constants";
 
 export const alertActions = {
-  success: (message, timeOut, isDismissable) => {
+  success: (message, isDismissable = false, timeOut = false) => {
     return {
       type: alertConstants.SUCCESS,
       payload: { message, timeOut, isDismissable },
     };
   },
-  error: (message, timeOut, isDismissable) => {
+  error: (message, isDismissable = false, timeOut = false) => {
     return {
       type: alertConstants.ERROR,
       payload: { message, timeOut, isDismissable },
     };
   },
-  warn: (message, timeOut, isDismissable) => {
+  warn: (message, isDismissable = false, timeOut = false) => {
     return {
       type: alertConstants.WARN,
       payload: { message, timeOut, isDismissable },
     };
   },
-  info: (message, timeOut, isDismissable) => {
+  info: (message, isDismissable = false, timeOut = false) => {
     return {
       type: alertConstants.INFO,
       payload: { message, timeOut, isDismissable },
@@ -39,5 +39,8 @@ export const alertActions = {
   },
   clearAlert: (index) => {
     return { type: alertConstants.CLEARALERT, payload: index };
+  },
+  clearAlerts: (index) => {
+    return { type: alertConstants.CLEARALERTS };
   },
 };

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
+import { globalHistory } from "@reach/router";
 
 import Footer from "../core/components/parts/CoreFooter";
 import Header from "../core/components/parts/CoreHeader";
 import Nav from "../core/components/parts/CoreNav";
+import AlertContainer from "../core/components/parts/AlertContainer";
 import Announcement from "../core/components/parts/Announcement";
 import FadeTransitionRouter from "../core/components/special/FadeTransitionRouter";
 import {
@@ -45,6 +47,12 @@ export default function App() {
     alertDispatch(alertActions.announce("Here is a default announcement"));
   }, []);
 
+  useEffect(() => {
+    return globalHistory.listen((item) => {
+      alertDispatch(alertActions.clearAlerts());
+    });
+  });
+
   return (
     <div>
       {alertState.announcement && (
@@ -59,6 +67,7 @@ export default function App() {
           handleSignOut={() => authDispatch(authActions.logout())}
         />
       </Header>
+      <AlertContainer />
       <FadeTransitionRouter>
         <PublicRoute exact path="/" component={HomePage} />
         <PublicRoute

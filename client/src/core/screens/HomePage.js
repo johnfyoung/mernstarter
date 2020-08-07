@@ -3,7 +3,7 @@ import ConnectedPage from "../components/layout/ConnectedPage";
 import { useAlertContext, alertActions } from "../state";
 
 export default function HomePage(props) {
-  const [alertState, alertDispatch] = useAlertContext();
+  const alertDispatch = useAlertContext()[1];
   return (
     <ConnectedPage pageClass="page-home">
       <div className="row">
@@ -12,7 +12,7 @@ export default function HomePage(props) {
           <button
             className="btn btn-primary"
             onClick={() =>
-              alertDispatch(alertActions.success("Hi there!", true, true))
+              alertDispatch(alertActions.success("Hi there!", true))
             }
           >
             Click me
