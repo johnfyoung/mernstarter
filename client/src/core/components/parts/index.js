@@ -8,3 +8,5 @@ export * from "./AlertAnimated";
 export * from "./AlertContainer";
 export * from "./ConnectedAlert";
 export * from "./ConnectedAlerts";
+
+export * from "./Card";
