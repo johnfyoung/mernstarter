@@ -4,9 +4,9 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import useragent from "express-useragent";
 
-import { dbg } from "./util/tools";
+import { dbg } from "./core/util/tools";
 
-import { logRequest, setCookie } from "./middleware";
+import { logRequest, setCookie } from "./core/middleware";
 
 require("dotenv").config();
 
@@ -30,16 +30,16 @@ mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     dbg("MongoDB connected");
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 // include the routes
-import routes from "./routes";
-app.use(routes);
+import coreRoutes from "./core/routes";
+app.use(coreRoutes);
 
 // Serve static assets if in production and not found
 if (process.env.NODE_ENV === "production") {
