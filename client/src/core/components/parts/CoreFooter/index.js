@@ -3,7 +3,7 @@ import "./style.scss";
 
 require("dotenv").config();
 
-export default function CoreFooter() {
+export function CoreFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="footer-bottom">
@@ -11,3 +11,5 @@ export default function CoreFooter() {
     </footer>
   );
 }
+
+export default CoreFooter;

@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { globalHistory } from "@reach/router";
 
-import Footer from "../core/components/parts/CoreFooter";
-import Header from "../core/components/parts/CoreHeader";
-import Nav from "../core/components/parts/CoreNav";
-import AlertContainer from "../core/components/parts/AlertContainer";
-import Announcement from "../core/components/parts/Announcement";
+import {
+  CoreFooter as Footer,
+  CoreHeader as Header,
+  CoreNav as Nav,
+  AlertContainer,
+  Announcement,
+} from "../core/components/parts/";
+
 import FadeTransitionRouter from "../core/components/special/FadeTransitionRouter";
 import {
   useAuthContext,

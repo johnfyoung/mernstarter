@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Link } from "@reach/router";
 import { dbg } from "../../utils";
 
-export default function CoreNav({ nav, authenticated, handleSignOut }) {
+export function CoreNav({ nav, authenticated, handleSignOut }) {
   const { brand, menu, submenu, hasSearch } = nav;
   dbg.log("Nav:: authenticated", authenticated);
   dbg.log("Nav:: Menu", menu);
@@ -108,3 +108,5 @@ export default function CoreNav({ nav, authenticated, handleSignOut }) {
     </nav>
   );
 }
+
+export default CoreNav;

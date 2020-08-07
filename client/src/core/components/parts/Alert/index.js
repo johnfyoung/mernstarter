@@ -1,6 +1,6 @@
 import React, { Children } from "react";
 
-export default function Alert({ type, show, onDismiss, dimissable, children }) {
+export function Alert({ type, show, onDismiss, dimissable, children }) {
   return (
     <div className={`alert ${type} fade ${show ? "show" : ""}`}>
       {children}
@@ -17,3 +17,5 @@ export default function Alert({ type, show, onDismiss, dimissable, children }) {
     </div>
   );
 }
+
+export default Alert;

@@ -3,7 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import Alert from "../Alert";
 
 import "./style.scss";
-export default function AlertAnimated({
+export function AlertAnimated({
   isOn,
   timeOut,
   type,
@@ -32,3 +32,5 @@ export default function AlertAnimated({
     </CSSTransition>
   );
 }
+
+export default AlertAnimated;

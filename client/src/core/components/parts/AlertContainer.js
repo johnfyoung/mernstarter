@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Column } from "../layout";
 import ConnectedAlerts from "../parts/ConnectedAlerts";
 
-export default function AlertContainer() {
+export function AlertContainer() {
   return (
     <Container className="mt-3">
       <Row>
@@ -13,3 +13,5 @@ export default function AlertContainer() {
     </Container>
   );
 }
+
+export default AlertContainer;

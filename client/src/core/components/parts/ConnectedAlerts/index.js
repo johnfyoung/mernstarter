@@ -3,7 +3,7 @@ import { useAlertContext, alertActions } from "../../../state";
 import AlertAnimated from "../AlertAnimated";
 import { dbg } from "../../../utils";
 
-export default function ConnectedAlerts() {
+export function ConnectedAlerts() {
   const [alertState, alertDispatch] = useAlertContext();
 
   // useEffect(() => {
@@ -40,3 +40,5 @@ export default function ConnectedAlerts() {
     </div>
   );
 }
+
+export default ConnectedAlerts;
