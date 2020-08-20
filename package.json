@@ -29,7 +29,7 @@
     "@babel/preset-react": "^7.9.1",
     "axios": "^0.19.2",
     "babel-loader": "^8.1.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.1.0",
     "eslint": "^6.6.0",
