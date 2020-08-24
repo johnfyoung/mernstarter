@@ -7,7 +7,7 @@ export function Card({ head, title, children, cta, url, md, lg }) {
         {head && <div className="card-header">{head}</div>}
         <div className="card-body">
           {title && <h5 className="card-title">{title}</h5>}
-          <p className="card-text">{children}</p>
+          <div className="card-text">{children}</div>
           {cta && (
             <a href={url} className="btn btn-primary">
               {cta}

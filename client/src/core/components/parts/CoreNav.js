@@ -8,7 +8,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
   dbg.log("Nav:: Menu", menu);
   //dbg.log("Props", props);
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       {brand && (
         <Link className="navbar-brand" to={brand.path}>
           {brand.label}
@@ -37,6 +37,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
                 return (
                   <li
                     key={key}
+                    data-key={key}
                     className={`nav-item ${menu[key].active ? "active" : ""}`}
                   >
                     <Link className="nav-link" to={menu[key].path}>
@@ -75,7 +76,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
               <ul className="navbar-nav ml-auto">
                 {Object.keys(submenu).map((key) => {
                   return (
-                    <li className="nav-item">
+                    <li key={key} className="nav-item">
                       <Link className="nav-link" to={submenu[key].path}>
                         {submenu[key].label}
                       </Link>
@@ -92,7 +93,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
             </li> */}
 
             <button
-              className="btn btn-outline-primary my-2 my-sm-0"
+              className="btn btn-outline-light my-2 my-sm-0"
               type="submit"
               onClick={handleSignOut}
             >
@@ -100,7 +101,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
             </button>
           </Fragment>
         ) : (
-          <Link className="btn btn-outline-primary my-2 my-sm-0" to="/signin">
+          <Link className="btn btn-outline-light my-2 my-sm-0" to="/signin">
             Sign In
           </Link>
         )}
