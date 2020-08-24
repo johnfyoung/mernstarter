@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       setAlertedState(true);
       navigate("/signin");
     }
-  });
+  }, [authState]);
 
   return (
     <Fragment>{authState.authenticated && <Component {...rest} />}</Fragment>
