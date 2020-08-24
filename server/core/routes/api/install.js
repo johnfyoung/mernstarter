@@ -6,7 +6,7 @@ import { dbg, asyncForEach, encrypt } from "../../util/tools";
 import { validateInstallInput } from "../../util/validation";
 
 import { User, Config, Group } from "../../models";
-import { groups } from "../../config";
+import { groups, siteConfigs } from "../../config";
 
 /**
  * @route   POST api/install
@@ -16,14 +16,14 @@ import { groups } from "../../config";
 router.post("/", async (req, res) => {
   try {
     const isInstalledSetting = await Config.findOne({
-      name: "isInstalled",
-      value: true
+      name: siteConfigs.ISINSTALLED,
+      value: true,
     });
 
     if (isInstalledSetting) {
       return res.status(400).json({
-        isInstalled: true,
-        msg: "Site already installed"
+        [siteConfigs.ISINSTALLED]: true,
+        msg: "Site already installed",
       });
     }
 
@@ -82,13 +82,16 @@ router.post("/", async (req, res) => {
  */
 router.get("/isinstalled", (req, res) => {
   Config.findOne({
-    name: "isInstalled"
-  }).then(setting => {
+    name: siteConfigs.ISINSTALLED,
+  }).then((setting) => {
     if (setting) {
-      return res.json({ isInstalled: true, details: setting.value });
+      return res.json({
+        [siteConfigs.ISINSTALLED]: true,
+        details: setting.value,
+      });
     } else {
       return res.json({
-        isInstalled: false
+        [siteConfigs.ISINSTALLED]: false,
       });
     }
   });
@@ -105,18 +108,24 @@ async function installConfig(appName) {
   try {
     // Config: App Name
     const appNameConfig = new Config({
-      name: "appName",
-      value: appName
+      name: siteConfigs.APPNAME,
+      value: appName,
     });
 
     // Config: Allow public registration
     const registrationConfig = new Config({
-      name: "publicRegistration",
-      value: true
+      name: siteConfigs.ALLOWPUBLICREGISTRATION,
+      value: true,
+    });
+
+    const configUpdate = new Config({
+      name: siteConfigs.CONFIGUPDATE,
+      value: new Date().toISOString(),
     });
 
     await appNameConfig.save();
     await registrationConfig.save();
+    await configUpdate.save();
   } catch (err) {
     console.log("Error saving site settings", err);
     throw new Error("Error saving site settings");
@@ -132,7 +141,7 @@ async function installGroups() {
       const newGroup = new Group({
         title,
         name,
-        permissions
+        permissions,
       });
 
       await newGroup.save();
@@ -147,7 +156,7 @@ async function installSuperUser({
   userFirstName,
   userLastName,
   userEmail,
-  userPassword
+  userPassword,
 }) {
   dbg("userPassword", userPassword);
   const adminGroup = await Group.findOne({ name: "admins" });
@@ -157,7 +166,7 @@ async function installSuperUser({
     firstName: userFirstName,
     lastName: userLastName,
     email: userEmail,
-    password: encryptedPassword
+    password: encryptedPassword,
   });
 
   newUser.groups.push(adminGroup);
@@ -173,8 +182,8 @@ async function installSuperUser({
 async function setAsInstalled() {
   try {
     const installedConfig = new Config({
-      name: "isInstalled",
-      value: true
+      name: siteConfigs.ISINSTALLED,
+      value: true,
     });
 
     await installedConfig.save();

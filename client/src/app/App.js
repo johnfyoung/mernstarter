@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { globalHistory, navigate } from "@reach/router";
 
 import {
@@ -14,6 +14,7 @@ import {
   useAuthContext,
   useNavContext,
   useAlertContext,
+  useConfigContext,
   alertActions,
   authActions,
 } from "../core/state";
@@ -34,27 +35,42 @@ import NotFoundPage from "../core/screens/NotFound";
 
 export default function App() {
   const [navState] = useNavContext();
+  const [configState] = useConfigContext();
   const [alertState, alertDispatch] = useAlertContext();
   const [authState, authDispatch] = useAuthContext({});
 
   useEffect(() => {
-    // const session = getSession();
-    // if (session) {
-    //   authDispatch(authActions.setUser(session));
-    // } else {
-    //   authDispatch(authActions.logout());
-    // }
-
     document.title = process.env.REACT_APP_NAME;
-
-    alertDispatch(alertActions.announce("Here is a default announcement"));
   }, []);
 
   useEffect(() => {
     return globalHistory.listen((item) => {
       alertDispatch(alertActions.clearAlerts());
+      checkForSession();
     });
   });
+
+  useEffect(() => {
+    if (authState.expired && !authState.loggingOut) {
+      authDispatch(authActions.signingOut());
+      navigate("/signin");
+      authDispatch(authActions.logout());
+      alertDispatch(
+        alertActions.error("Your session has expired.", true, 5000)
+      );
+    } else {
+    }
+  }, [authState.expired]);
+
+  function checkForSession() {
+    const session = getSession();
+    dbg.log("checkForSession Session", session);
+    dbg.log("checkForSession authState.authenticated", authState.authenticated);
+    if (!session && authState.authenticated && !authState.loggingOut) {
+      dbg.log("checkForSession cleaning up...");
+      authDispatch(authActions.expired());
+    }
+  }
 
   function handleSignOut() {
     authDispatch(authActions.signingOut());
@@ -89,21 +105,25 @@ export default function App() {
           component={SignInPage}
           auth={authState}
         />
-        <PublicRoute
-          exact
-          path="/register"
-          restricted={true}
-          auth={authState}
-          component={RegisterPage}
-        />
-        <PublicRoute
-          exact
-          path="/install"
-          restricted={true}
-          auth={authState}
-          appName={process.env.REACT_APP_NAME}
-          component={InstallPage}
-        />
+        {configState.publicRegistration && (
+          <PublicRoute
+            exact
+            path="/register"
+            restricted={true}
+            auth={authState}
+            component={RegisterPage}
+          />
+        )}
+        {!configState.isInstalled && (
+          <PublicRoute
+            exact
+            path="/install"
+            restricted={true}
+            auth={authState}
+            appName={process.env.REACT_APP_NAME}
+            component={InstallPage}
+          />
+        )}
         <PrivateRoute
           exact
           path="/admin"

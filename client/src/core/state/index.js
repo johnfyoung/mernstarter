@@ -9,3 +9,5 @@ export * from "./actions/auth.actions";
 export * from "./reducers/alert.reducer";
 export * from "./reducers/nav.reducer";
 export * from "./reducers/auth.reducer";
+
+export * from "./reducers/config.reducer";

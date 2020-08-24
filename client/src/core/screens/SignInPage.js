@@ -5,6 +5,8 @@ import {
   authActions,
   alertActions,
   useAlertContext,
+  useConfigContext,
+  authConstants,
 } from "../state";
 import { useLoginService } from "../services/auth.services";
 
@@ -19,6 +21,7 @@ export default function SignInPage() {
     isSubmitted: false,
   });
 
+  const [configState] = useConfigContext();
   const [authState, authDispatch] = useAuthContext();
   const [alertState, alertDispatch] = useAlertContext();
 
@@ -38,7 +41,11 @@ export default function SignInPage() {
     if (loginResult && loginResult.data) {
       dbg.log(loginResult.data);
 
-      authDispatch(authActions.loginSuccess(getTokenPayload()));
+      authDispatch(
+        authActions.loginSuccess(
+          getTokenPayload(authConstants.AUTH_COOKIE_HEADERPAYLOAD)
+        )
+      );
       alertDispatch(alertActions.success("Login successful", true, 6000));
       navigate("/admin");
     }
@@ -116,9 +123,11 @@ export default function SignInPage() {
               {isLoading ? "Signing in..." : "Submit"}
             </button>
           </form>
-          <div className="mt-3">
-            Don't have an account? <Link to="/register">Register here.</Link>
-          </div>
+          {configState.publicRegistration && (
+            <div className="mt-3">
+              Don't have an account? <Link to="/register">Register here.</Link>
+            </div>
+          )}
         </div>
       </div>
     </ConnectedPage>

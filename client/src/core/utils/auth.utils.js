@@ -3,6 +3,8 @@ import jwt_decode from "jwt-decode";
 import { authConstants } from "../state";
 import { dbg } from "./log.utils";
 
+import { getRemoteConfig } from "../services";
+
 export const getCookie = (name) => {
   var v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
   return v ? v[2] : null;
@@ -31,12 +33,12 @@ export const setRequestedWithHeader = () => {
   axios.defaults.headers.common["X-Requested-With"] = "XmlHttpRequest";
 };
 
-export const getAuthCookieToken = () => {
-  return getCookie(authConstants.AUTH_COOKIE_HEADERPAYLOAD);
-};
+// export const getAuthCookieToken = () => {
+//   return getCookie(authConstants.AUTH_COOKIE_HEADERPAYLOAD);
+// };
 
-export const getTokenPayload = () => {
-  const token = getAuthCookieToken();
+export const getTokenPayload = (cookieName) => {
+  const token = getCookie(cookieName);
   if (token) {
     const decoded = jwt_decode(token);
 
@@ -49,7 +51,7 @@ export const getTokenPayload = () => {
 };
 
 export const getSession = () => {
-  const payload = getTokenPayload();
+  const payload = getTokenPayload(authConstants.AUTH_COOKIE_HEADERPAYLOAD);
   // check for expired token
   const currentTime = Date.now() / 1000;
   if (payload && payload.exp > currentTime) {
@@ -57,6 +59,11 @@ export const getSession = () => {
   }
 
   return null;
+};
+
+export const getConfig = async () => {
+  await getRemoteConfig();
+  return getTokenPayload(authConstants.SITE_COOKIE_HEADERPAYLOAD);
 };
 
 export const getPermissions = () => {

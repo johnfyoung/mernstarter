@@ -11,11 +11,10 @@ function setAuthentication(session) {
   if (session) {
     return {
       authenticated: true,
-      user: session,
     };
   }
 
-  return {};
+  return { authenticated: false };
 }
 
 const reducer = (state, action) => {
@@ -26,6 +25,7 @@ const reducer = (state, action) => {
         ...state,
         loggingIn: true,
         loggingOut: false,
+        expired: false,
       };
     case authConstants.LOGIN_COMPLETE:
       return {
@@ -49,10 +49,14 @@ const reducer = (state, action) => {
       return {
         loggingOut: true,
       };
+    case authConstants.AUTH_EXPIRED:
+      return {
+        expired: true,
+      };
     case authConstants.SET_CURRENT_USER:
       return {
-        authenticated: isEmpty(action.payload) ? false : true,
-        user: action.payload,
+        ...state,
+        ...setAuthentication(action.payload),
       };
     default:
       return state;

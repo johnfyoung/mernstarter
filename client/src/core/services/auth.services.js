@@ -1,5 +1,7 @@
 import React from "react";
 import { useResource } from "react-request-hook";
+import axios from "axios";
+import { dbg } from "../utils";
 
 export function useLoginService() {
   return useResource((email, password) => ({
@@ -17,3 +19,11 @@ export function useRegistrationService() {
     data,
   }));
 }
+
+export const getRemoteConfig = async () => {
+  try {
+    await axios.get(`/api/auth/authorize`);
+  } catch (ex) {
+    dbg.log("getConfig error: ", ex);
+  }
+};

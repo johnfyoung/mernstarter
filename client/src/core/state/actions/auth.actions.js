@@ -9,6 +9,9 @@ export const authActions = {
   signingIn: () => ({
     type: authConstants.LOGIN_REQUEST,
   }),
+  expired: () => ({
+    type: authConstants.AUTH_EXPIRED,
+  }),
   complete: () => ({
     type: authConstants.LOGIN_COMPLETE,
   }),

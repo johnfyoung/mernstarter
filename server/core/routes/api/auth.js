@@ -2,7 +2,13 @@ import express from "express";
 import jwt from "jsonwebtoken";
 
 import { User, Group } from "../../models";
-import { dbg, compare } from "../../util/tools";
+import {
+  dbg,
+  compare,
+  signToken,
+  setTokenAsCookie,
+  getSiteConfig,
+} from "../../util/tools";
 import { validateLoginInput } from "../../util/validation";
 import { jwtCookies } from "../../config/constants";
 
@@ -58,23 +64,28 @@ router.post("/authenticate", (req, res) => {
         }
 
         // Sign the token
-        const token = jwt.sign(payload, process.env.SECRETKEY, {
-          expiresIn: 3600,
-        });
+        const token = signToken(payload);
 
         // Setting the JWT in two cookies
-        // @see https://medium.com/lightrail/getting-token-authentication-right-in-a-stateless-single-page-application-57d0c6474e3
-        const tokenParts = token.split(".");
-        const tokenSignature = tokenParts.pop();
+        // // @see https://medium.com/lightrail/getting-token-authentication-right-in-a-stateless-single-page-application-57d0c6474e3
+        // const tokenParts = token.split(".");
+        // const tokenSignature = tokenParts.pop();
 
-        res.cookie(jwtCookies.HEADERPAYLOAD, tokenParts.join("."), {
-          secure: process.env.COOKIE_SECURE === "false" ? false : true,
-          expires: new Date(Date.now() + 30 * 60000),
-        });
-        res.cookie(jwtCookies.SIGNATURE, tokenSignature, {
-          secure: process.env.COOKIE_SECURE === "false" ? false : true,
-          httpOnly: true,
-        });
+        // res.cookie(jwtCookies.HEADERPAYLOAD, tokenParts.join("."), {
+        //   secure: process.env.COOKIE_SECURE === "false" ? false : true,
+        //   expires: new Date(Date.now() + 30 * 60000),
+        // });
+        // res.cookie(jwtCookies.SIGNATURE, tokenSignature, {
+        //   secure: process.env.COOKIE_SECURE === "false" ? false : true,
+        //   httpOnly: true,
+        // });
+
+        setTokenAsCookie(
+          token,
+          res,
+          jwtCookies.HEADERPAYLOAD,
+          jwtCookies.SIGNATURE
+        );
 
         return res.json({
           success: true,
@@ -106,7 +117,7 @@ router.delete("/authenticate", (req, res) => {
   });
 });
 
-router.post("/authorize", (req, res) => {
+router.get("/authorize", (req, res) => {
   res.send("Hello from /api/auth/authorize");
 });
 
