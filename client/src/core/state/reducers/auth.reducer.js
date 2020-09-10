@@ -11,6 +11,8 @@ function setAuthentication(session) {
   if (session) {
     return {
       authenticated: true,
+      permissions: session.permissions,
+      userName: `${session.firstName} ${session.lastName}`,
     };
   }
 
