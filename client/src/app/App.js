@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { globalHistory, navigate } from "@reach/router";
+import { permissionsConstants } from "../core/state/constants/permissions.constants";
 
 import {
   CoreFooter as Footer,
@@ -28,6 +29,7 @@ import PublicRoute from "../core/components/special/PublicRoute";
 import HomePage from "../core/screens/HomePage";
 import SignInPage from "../core/screens/SignInPage";
 import AdminPage from "../core/screens/AdminPage";
+import UsersPage from "../core/screens/UsersPage";
 import ProfilePage from "../core/screens/ProfilePage";
 import InstallPage from "../core/screens/InstallPage";
 import RegisterPage from "../core/screens/RegisterPage";
@@ -92,6 +94,10 @@ export default function App() {
         <Nav
           nav={navState}
           authenticated={authState.authenticated}
+          userName={authState.authenticated ? authState.userName : ""}
+          userPermissions={
+            authState.authenticated ? authState.permissions : null
+          }
           handleSignOut={handleSignOut}
         />
       </Header>
@@ -129,6 +135,16 @@ export default function App() {
           path="/admin"
           component={AdminPage}
           auth={authState}
+        />
+        <PrivateRoute
+          exact
+          path="/admin/users"
+          component={UsersPage}
+          auth={authState}
+          permissions={[
+            permissionsConstants.USERS_ALL,
+            permissionsConstants.USERS_VIEW,
+          ]}
         />
         <PrivateRoute
           exact

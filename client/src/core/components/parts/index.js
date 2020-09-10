@@ -11,3 +11,5 @@ export * from "./ConnectedAlerts";
 
 export * from "./Card";
 export * from "./BreadCrumb";
+
+export * from "./PersonImage";
