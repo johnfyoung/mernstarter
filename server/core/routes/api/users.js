@@ -3,7 +3,7 @@ import express from "express";
 const router = express.Router();
 
 import { permissions, siteConfigs } from "../../config";
-import { dbg, encrypt, getConfig } from "../../util/tools";
+import { dbg, encrypt, getConfig, logError } from "../../util/tools";
 import { isUserAuthorized } from "../../middleware";
 import { User, Group } from "../../models";
 import { validateUserRegistration } from "../../util/validation";
@@ -57,14 +57,17 @@ router.post("/register", async (req, res) => {
 
 router.get(
   "/",
-  (req, res, next) => {
-    isUserAuthorized(req, res, next, [
-      permissions.users.all,
-      permissions.users.view,
-    ]);
-  },
+  isUserAuthorized([permissions.users.all, permissions.users.view]),
   async (req, res, next) => {
-    res.status(200).send("Auth'd for user list");
+    dbg("Auth'd for user list");
+    try {
+      const users = await User.find({});
+      dbg("Users:", users);
+      res.json(users);
+    } catch (err) {
+      await logError(`users::get error - ${err}`);
+      return res.status(500);
+    }
   }
 );
 
