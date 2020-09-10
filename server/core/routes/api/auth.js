@@ -7,7 +7,7 @@ import {
   compare,
   signToken,
   setTokenAsCookie,
-  getSiteConfig,
+  getPermissions,
 } from "../../util/tools";
 import { validateLoginInput } from "../../util/validation";
 import { jwtCookies } from "../../config/constants";
@@ -44,9 +44,10 @@ router.post("/authenticate", (req, res) => {
         // User matched
         const payload = {
           id: user.id,
-          firstName: user.name,
-          lastName: user.name,
+          firstName: user.firstName,
+          lastName: user.lastName,
           groups: user.groups,
+          permissions: getPermissions(user),
         };
 
         // Check to see if this user is already associated with the requestion device
