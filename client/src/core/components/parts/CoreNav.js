@@ -1,12 +1,19 @@
 import React, { Fragment } from "react";
 import { Link } from "@reach/router";
+import PersonImage from "./PersonImage";
+import { permissionsConstants } from "../../state/constants/permissions.constants";
 import { dbg } from "../../utils";
 
-export function CoreNav({ nav, authenticated, handleSignOut }) {
+export function CoreNav({
+  nav,
+  authenticated,
+  userName,
+  handleSignOut,
+  userPermissions,
+}) {
   const { brand, menu, submenu, hasSearch } = nav;
-  dbg.log("Nav:: authenticated", authenticated);
-  dbg.log("Nav:: Menu", menu);
-  //dbg.log("Props", props);
+  dbg.log("Nav:: userPermissions", userPermissions);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       {brand && (
@@ -31,8 +38,13 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
           {menu &&
             Object.keys(menu).map((key) => {
               if (
-                !menu[key].privilege ||
-                (menu[key].privilege && authenticated)
+                (!menu[key].privilege ||
+                  (menu[key].privilege && authenticated)) &&
+                (!menu[key].permissions ||
+                  userPermissions.filter((p) =>
+                    menu[key].permissions.includes(p)
+                  ).length > 0 ||
+                  userPermissions.includes(permissionsConstants.SITE_ALL))
               ) {
                 return (
                   <li
@@ -71,7 +83,11 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
           </form>
         )}
         {authenticated ? (
-          <Fragment>
+          <div className="d-flex">
+            <span className="d-flex nav-user nav-link text-light">
+              <PersonImage width={30} />
+              &nbsp;&nbsp;{userName}
+            </span>
             {submenu ? (
               <ul className="navbar-nav ml-auto">
                 {Object.keys(submenu).map((key) => {
@@ -99,7 +115,7 @@ export function CoreNav({ nav, authenticated, handleSignOut }) {
             >
               Sign Out
             </button>
-          </Fragment>
+          </div>
         ) : (
           <Link className="btn btn-outline-light my-2 my-sm-0" to="/signin">
             Sign In
